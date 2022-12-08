@@ -1,4 +1,4 @@
-package org.haok.resourcespackmaker;
+package org.haok.resourcespackmaker.pack;
 
 import java.io.File;
 

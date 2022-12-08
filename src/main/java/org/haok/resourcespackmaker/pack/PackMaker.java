@@ -1,8 +1,8 @@
-package org.haok.resourcespackmaker;
+package org.haok.resourcespackmaker.pack;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
-import org.haok.resourcespackmaker.pack.Pack;
+import org.haok.resourcespackmaker.App;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,7 +10,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static org.haok.resourcespackmaker.PackConfig.*;
+import static org.haok.resourcespackmaker.pack.PackConfig.*;
 import static org.haok.resourcespackmaker.util.Util.*;
 
 public class PackMaker {
@@ -21,13 +21,13 @@ public class PackMaker {
             success = false;
         }
         File packPath = new File(exportPath.getAbsolutePath() + App.SEPARATOR + packName);
-        App.logger.info("create pack directory:" + packPath.mkdirs());
-        File pack_mcmeta = new File(packPath.getAbsolutePath() + App.SEPARATOR + "pack.mcmeta");
-        App.logger.info("make pack.mcmeta:" + pack_mcmeta.createNewFile());
+        App.logger.info("create pack directory:" + packPath.mkdirs());  //创建目录
+        File pack_mcmeta = new File(packPath.getAbsolutePath() + App.SEPARATOR + "pack.mcmeta");    //pack.mcmeta
+        App.logger.info("make pack.mcmeta:" + pack_mcmeta.createNewFile());     //创建pack.mcmeta文件
         BufferedWriter writer = new BufferedWriter(new FileWriter(pack_mcmeta));
         {
             JSONObject object = new JSONObject(new HashMap<>());
-            object.put("pack", new Pack(9, ""));
+            object.put("pack", new Pack(packVersion, packIntroduction));
             String json = object.toJSONString();
             writer.write(json);
         }

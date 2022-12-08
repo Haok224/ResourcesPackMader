@@ -15,6 +15,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.haok.resourcespackmaker.pack.PackConfig;
+import org.haok.resourcespackmaker.pack.PackMaker;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class AppController {
+    /* FXML */
     public Button showFile;
     public Label showText;
     public TextField icon;
@@ -80,7 +83,7 @@ public class AppController {
 
     @FXML
     private TextField ttf_path;
-
+    /*按钮点击、文件拖拽方法*/
     @FXML
     void TTFDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
@@ -98,6 +101,7 @@ public class AppController {
         if (event.getGestureSource() != ttf_path) {
             event.acceptTransferModes(TransferMode.ANY);
         }
+
     }
 
     @FXML

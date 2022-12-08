@@ -22,7 +22,6 @@ public class Pack{
     }
 
     public Pack(){
-
     }
     public Pack(int pack_format,String description){
         this.description = description;

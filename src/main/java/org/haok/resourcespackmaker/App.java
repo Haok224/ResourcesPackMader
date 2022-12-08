@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 import org.haok.resourcespackmaker.log.Logger;
 
 public class App extends Application {
-    static Stage primaryStage;
-    static final String SEPARATOR = System.getProperty("file.separator");
+    public static Stage primaryStage;
+    public static final String SEPARATOR = System.getProperty("file.separator");
     public static final Logger logger = new Logger();
     @Override
     public void start(Stage stage) throws Exception {
