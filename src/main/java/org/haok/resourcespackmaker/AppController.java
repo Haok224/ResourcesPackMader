@@ -53,10 +53,10 @@ public class AppController {
     public Button btn0;
     public TextField loadBackground0Path;
     public Button chooseLoadBackground0;
-    public ImageView loadBackground0View;
-    public TextField loadBackgroundPath1;
+    public TextField loadBackground1Path;
     public Button chooseLoadBackground1;
-    public ImageView loadBackgroundView1;
+    public CheckBox isGrid;
+    public TextField loadBackground_1Path;
     @FXML
     private Button chooseExportPath;
 
@@ -83,6 +83,7 @@ public class AppController {
 
     @FXML
     private TextField ttf_path;
+
     /*按钮点击、文件拖拽方法*/
     @FXML
     void TTFDropped(DragEvent event) {
@@ -299,20 +300,37 @@ public class AppController {
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("图片文件", "*.png"));
         chooser.setTitle("选择文件");
         File file = chooser.showOpenDialog(App.primaryStage);
-        App.logger.info("choose image file:"+file);
+        App.logger.info("choose image file:" + file);
         return file;
     }
 
+    //主世界加载画面
     public void chooseLoadBackground0() {
         File file = chooseImage();
         PackConfig.loadBackground0 = file;
-        loadBackground0View.setImage(new Image(file.getAbsolutePath()));
         loadBackground0Path.setText(file.getAbsolutePath());
+        if (isGrid.isSelected()) {
+            PackConfig.isGrid = true;
+        }
     }
 
+
+    //末地加载画面
     public void chooseLoadBackground1() {
-        //TODO
-        //File file = chooseImage();
-        System.out.println("TODO!!!");
+        File file = chooseImage();
+        PackConfig.loadBackground1 = file;
+        loadBackground1Path.setText(file.getAbsolutePath());
+        if (isGrid.isSelected()) {
+            PackConfig.isGrid = true;
+        }
+    }
+
+    public void chooseLoadBackground_1() {
+        File file = chooseImage();
+        PackConfig.loadBackground_1 = file;
+        loadBackground_1Path.setText(file.getAbsolutePath());
+        if (isGrid.isSelected()) {
+            PackConfig.isGrid = true;
+        }
     }
 }

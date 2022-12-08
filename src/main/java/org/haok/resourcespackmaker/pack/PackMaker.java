@@ -101,6 +101,10 @@ public class PackMaker {
                 File panorama_overlay = new File(panoramaPath.getAbsolutePath() + App.SEPARATOR + "panorama_overlay.png");
                 copy(background, panorama_overlay);
             }
+            if (loadBackground0 != null){
+                //todo
+                System.out.println("todo");
+            }
             successFile = packPath;
             if (isZip) {
                 File zipFile = new File(exportPath.toString() + App.SEPARATOR + packName + ".zip");
