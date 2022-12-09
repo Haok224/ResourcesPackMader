@@ -10,11 +10,12 @@ import java.util.zip.ZipOutputStream;
 
 public class Util {
     private static final byte[] buf = new byte[1024 * 1024];
+
     public static void copy(File source, File dest) throws IOException {
         if (!dest.isFile()) {
-            App.logger.info("dest file is not a file. create new file:"+dest.createNewFile());
+            App.logger.info("dest file is not a file. create new file:" + dest.createNewFile());
         }
-        App.logger.info("copy file from:"+source+" to: "+dest);
+        App.logger.info("copy file from:" + source + " to: " + dest);
         try (InputStream input = new FileInputStream(source); OutputStream output = new FileOutputStream(dest)) {
             byte[] buf = new byte[1024];
             int bytesRead;
@@ -25,7 +26,7 @@ public class Util {
     }
 
     public static boolean deleteDir(File directory) {
-        App.logger.info("delete directory:"+directory);
+        App.logger.info("delete directory:" + directory);
         if (directory.isDirectory()) {
             String[] children = directory.list();
             for (int i = 0; i < Objects.requireNonNull(children).length; i++) {
@@ -38,18 +39,20 @@ public class Util {
         }
         return directory.delete();
     }
+
     public static String getFileType(String fileName) {
         String[] strArray = fileName.split("\\.");
-        int suffixIndex = strArray.length -1;
+        int suffixIndex = strArray.length - 1;
         return strArray[suffixIndex];
     }
+
     public static void toZip(String zipFileName, List<File> srcFiles) {
         ZipOutputStream zos = null;
-        App.logger.info("to zip scr files:"+srcFiles);
+        App.logger.info("to zip scr files:" + srcFiles);
         try {
             File file = new File(zipFileName);
-            if (!file.isFile()){
-                App.logger.info("create zip file:"+file.createNewFile());
+            if (!file.isFile()) {
+                App.logger.info("create zip file:" + file.createNewFile());
             }
             FileOutputStream fileOutputStream = new FileOutputStream(file);
             zos = new ZipOutputStream(fileOutputStream);
@@ -69,8 +72,7 @@ public class Util {
         }
     }
 
-    private static void compress(File sourceFile, ZipOutputStream zos, String name,
-                                boolean KeepDirStructure) throws Exception {
+    private static void compress(File sourceFile, ZipOutputStream zos, String name, boolean KeepDirStructure) throws Exception {
 
         if (sourceFile.isFile()) {
             zos.putNextEntry(new ZipEntry(name));
@@ -95,7 +97,6 @@ public class Util {
                     } else {
                         compress(file, zos, file.getName(), false);
                     }
-
                 }
             }
         }

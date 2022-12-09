@@ -1,14 +1,11 @@
 package org.haok.resourcespackmaker.pack;
 
-import com.alibaba.fastjson2.JSON;
-import com.alibaba.fastjson2.JSONObject;
 import org.haok.resourcespackmaker.App;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static org.haok.resourcespackmaker.pack.PackConfig.*;
 import static org.haok.resourcespackmaker.util.Util.*;
@@ -26,10 +23,16 @@ public class PackMaker {
         App.logger.info("make pack.mcmeta:" + pack_mcmeta.createNewFile());     //创建pack.mcmeta文件
         BufferedWriter writer = new BufferedWriter(new FileWriter(pack_mcmeta));
         {
-            JSONObject object = new JSONObject(new HashMap<>());
-            object.put("pack", new Pack(packVersion, packIntroduction));
-            String json = object.toJSONString();
-            writer.write(json);
+            String s = String.format("""
+                    {
+                       "pack":{
+                          "pack_format":%s,
+                          "description":"%s"
+                       }
+                    }
+                                        
+                    """, packVersion,packIntroduction);
+            writer.write(s);
         }
         writer.close();
         if (!(ttfFile == null)) {
@@ -41,18 +44,21 @@ public class PackMaker {
             App.logger.info("make default.json file:" + jsonFile.createNewFile());
             BufferedWriter jsonWriter = new BufferedWriter(new FileWriter(jsonFile));
             {
-                HashMap<String,Object> set = new HashMap<>();
-                HashMap<String,Object> map = new HashMap<>();
-                map.put("type","ttf");
-                map.put("file","minecraft:font.ttf");
-                map.put("shift",new int[]{0,1});
-                map.put("size",11.0);
-                map.put("oversample",4.0);
-                HashMap[] maps = new HashMap[]{map};
-                set.put("providers",maps);
-                String json = JSON.toJSONString(set);
-                App.logger.info("default json file content:\n"+json);
-                jsonWriter.write(json);
+                String s = """
+                        {
+                            "providers": [
+                                {
+                                    "type": "ttf",
+                                    "file": "minecraft:font",
+                        			"shift": [0, 1],
+                         			"size": 11.0,
+                         			"oversample": 4.0
+                                }
+                            ]
+                        }
+                                                
+                        """;
+                jsonWriter.write(s);
             }
             jsonWriter.close();
 
@@ -101,9 +107,18 @@ public class PackMaker {
                 File panorama_overlay = new File(panoramaPath.getAbsolutePath() + App.SEPARATOR + "panorama_overlay.png");
                 copy(background, panorama_overlay);
             }
-            if (loadBackground0 != null){
-                //todo
-                System.out.println("todo");
+            if (loadBackground0 != null) {
+                File loadBackGround0Path = new File(packPath.getAbsolutePath() + "" + App.SEPARATOR + "assets" + App.SEPARATOR + "minecraft" + App.SEPARATOR + "optifine" + App.SEPARATOR + "gui" + App.SEPARATOR + "loading");
+                App.logger.info("create load background directory:" + loadBackGround0Path.mkdirs());
+                if (!isGrid) {
+                    File file = new File(loadBackGround0Path.getAbsolutePath() + App.SEPARATOR + "loading.properties");
+                    App.logger.info("create loading.properties:" + file.createNewFile());
+                    BufferedWriter writer1 = new BufferedWriter(new FileWriter(file));
+                    writer1.write("scaleMode=stretch");
+                }
+                File dest = new File(loadBackGround0Path.getAbsolutePath() + App.SEPARATOR + "background0.png");
+                App.logger.info("make background-0 file:" + dest.createNewFile());
+                copy(loadBackground0, dest);
             }
             successFile = packPath;
             if (isZip) {

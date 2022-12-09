@@ -4,3 +4,10 @@
 .tab{
     -fx-background-color: #99ccff;
 }
+.root{
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+}
+.label{
+    -fx-text-fill: white;
+}

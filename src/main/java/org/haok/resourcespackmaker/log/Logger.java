@@ -1,17 +1,23 @@
 package org.haok.resourcespackmaker.log;
-
-import org.haok.resourcespackmaker.util.Util;
-
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.scene.Scene;
+import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
+
+import org.haok.resourcespackmaker.App;
+import org.haok.resourcespackmaker.io.StringPrintStream;
+import org.haok.resourcespackmaker.util.Util;
+
 public class Logger {
-    private PrintStream stream;
     private final SimpleDateFormat format;
+    private PrintStream stream;
 
     public Logger() {
         this.format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS");
@@ -27,7 +33,6 @@ public class Logger {
         new Thread(() -> {
             File[] fileList = new File("log/").listFiles();
             ArrayList<File> logFileList = new ArrayList<>();
-            ArrayList<File> zipFileList = new ArrayList<>();
             int logFile = 0;
             int zipFile = 0;
             if (fileList != null) {
@@ -38,7 +43,6 @@ public class Logger {
                         logFileList.add(file);
                     } else if (Util.getFileType(path).equals("zip")) {
                         zipFile++;
-                        zipFileList.add(file);
                     }
                 }
             }
@@ -62,11 +66,35 @@ public class Logger {
         stream.println(format.format(new Date().getTime()) + " [INFO] " + o);
         System.out.println(format.format(new Date().getTime()) + " [INFO] " + o);
     }
+    public void info(Object o,boolean onlyConsole){
+        System.out.println(o);
+        if (onlyConsole){
+            return;
+        }
+        stream.println(o);
+    }
 
     public void warn(Throwable t) {
         stream.println(format.format(new Date().getTime()) + " [WARN] ");
         t.printStackTrace(stream);
         System.err.println(format.format(new Date().getTime()) + " [WARN] ");
         t.printStackTrace(System.err);
+        Stage s = new Stage();
+        s.setTitle("错误");
+        StringPrintStream stream1 = new StringPrintStream();
+        t.printStackTrace(stream1);
+        String err = stream1.toString();
+        stream1.close();
+        TextArea area = new TextArea(err);
+        Scene scene = new Scene(area);
+        s.setScene(scene);
+        s.show();
+    }
+
+    public static class LogOutputStream extends OutputStream {
+        @Override
+        public void write(int b) {
+            App.logger.info((char) b,true);
+        }
     }
 }

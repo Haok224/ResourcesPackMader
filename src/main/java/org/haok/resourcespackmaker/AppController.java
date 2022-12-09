@@ -3,10 +3,10 @@ package org.haok.resourcespackmaker;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -21,10 +21,7 @@ import org.haok.resourcespackmaker.pack.PackMaker;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class AppController {
@@ -83,6 +80,24 @@ public class AppController {
 
     @FXML
     private TextField ttf_path;
+
+    public static void fileNotFound(IOException exception) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("系统找不到指定的文件");
+        alert.setHeaderText("系统找不到指定的文件");
+        alert.setContentText("文件可能不存在。");
+        App.logger.warn(exception);
+        alert.show();
+    }
+
+    private static File chooseImage() {
+        FileChooser chooser = new FileChooser();
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("图片文件", "*.png"));
+        chooser.setTitle("选择文件");
+        File file = chooser.showOpenDialog(App.primaryStage);
+        App.logger.info("choose image file:" + file);
+        return file;
+    }
 
     /*按钮点击、文件拖拽方法*/
     @FXML
@@ -229,15 +244,6 @@ public class AppController {
         return false;
     }
 
-    public static void fileNotFound(IOException exception) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("系统找不到指定的文件");
-        alert.setHeaderText("系统找不到指定的文件");
-        alert.setContentText("文件可能不存在。");
-        App.logger.warn(exception);
-        alert.show();
-    }
-
     public void iconOver(DragEvent dragEvent) {
         if (dragEvent.getGestureSource() != icon) {
             dragEvent.acceptTransferModes(TransferMode.ANY);
@@ -293,15 +299,6 @@ public class AppController {
         File file = chooseImage();
         path0.setText(file.getAbsolutePath());
         PackConfig.panorama0 = file;
-    }
-
-    private static File chooseImage() {
-        FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("图片文件", "*.png"));
-        chooser.setTitle("选择文件");
-        File file = chooser.showOpenDialog(App.primaryStage);
-        App.logger.info("choose image file:" + file);
-        return file;
     }
 
     //主世界加载画面
