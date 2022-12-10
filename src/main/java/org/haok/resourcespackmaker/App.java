@@ -12,9 +12,6 @@ public class App extends Application {
     public static final Logger logger = new Logger();
     public static Stage primaryStage;
 
-    public static void main(String[] args) {
-        launch();
-    }
 
     @Override
     public void start(Stage stage) throws Exception {

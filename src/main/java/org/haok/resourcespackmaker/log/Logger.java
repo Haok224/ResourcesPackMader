@@ -81,10 +81,10 @@ public class Logger {
         t.printStackTrace(System.err);
         Stage s = new Stage();
         s.setTitle("错误");
-        StringPrintStream stream1 = new StringPrintStream();
-        t.printStackTrace(stream1);
-        String err = stream1.toString();
-        stream1.close();
+        StringPrintStream message = new StringPrintStream();
+        t.printStackTrace(message);
+        String err = message.toString();
+        message.close();
         TextArea area = new TextArea(err);
         Scene scene = new Scene(area);
         s.setScene(scene);
@@ -92,6 +92,12 @@ public class Logger {
     }
 
     public static class LogOutputStream extends OutputStream {
+        @Override
+        public void close() throws IOException {
+            super.close();
+            App.logger.info("Log output stream close now.",true);
+        }
+
         @Override
         public void write(int b) {
             App.logger.info((char) b,true);

@@ -315,8 +315,8 @@ public class AppController {
     //末地加载画面
     public void chooseLoadBackground1() {
         File file = chooseImage();
-        PackConfig.loadBackground1 = file;
         loadBackground1Path.setText(file.getAbsolutePath());
+        PackConfig.loadBackground1 = file;
         if (isGrid.isSelected()) {
             PackConfig.isGrid = true;
         }

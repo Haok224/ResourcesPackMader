@@ -20,7 +20,7 @@ public class PackConfig {
     public static File panorama4;
     public static File panorama5;
     public static File background;
-    public static File loadBackground1;
     public static boolean isGrid;
     public static File loadBackground_1;
+    public static File loadBackground1;
 }
