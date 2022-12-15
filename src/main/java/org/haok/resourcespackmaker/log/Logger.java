@@ -84,7 +84,6 @@ public class Logger {
         StringPrintStream message = new StringPrintStream();
         t.printStackTrace(message);
         String err = message.toString();
-        message.close();
         TextArea area = new TextArea(err);
         Scene scene = new Scene(area);
         s.setScene(scene);

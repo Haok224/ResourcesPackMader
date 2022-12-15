@@ -15,13 +15,17 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.haok.resourcespackmaker.pack.MusicMaker;
 import org.haok.resourcespackmaker.pack.PackConfig;
 import org.haok.resourcespackmaker.pack.PackMaker;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public class AppController {
@@ -175,6 +179,7 @@ public class AppController {
         PackConfig.exportPath = new File(path.getText());
         try {
             PackMaker.makePack(isZip.isSelected());
+            MusicMaker.make();
         } catch (Exception e) {
             App.logger.warn(e);
         }
@@ -195,16 +200,21 @@ public class AppController {
     }
 
     public void showFile() {
+        if (PackConfig.successFile == null) {
+            App.logger.warn(new AssertionError());
+            return;
+        }
         if (showFile.isVisible()) {
             if (App.SEPARATOR.equals("\\")) {
-                ProcessBuilder builder = new ProcessBuilder("explorer", "/select,", PackConfig.successFile.getAbsolutePath());
+                ProcessBuilder builder = new ProcessBuilder("explorer",
+                        "/select,",
+                        PackConfig.successFile.getAbsolutePath());
                 try {
                     builder.start();
                 } catch (IOException e) {
                     App.logger.warn(e);
                 }
             } else if (Desktop.isDesktopSupported()) {
-
                 try {
                     Desktop.getDesktop().open(PackConfig.exportPath);
                 } catch (IOException e) {

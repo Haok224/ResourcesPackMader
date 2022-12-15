@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
@@ -96,7 +98,43 @@
       </Tab>
       <Tab text="音乐">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Accordion prefHeight="373.0" prefWidth="600.0">
+                    <panes>
+                      <TitledPane animated="false" prefHeight="354.0" prefWidth="600.0" text="常规游戏">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="35.0" prefWidth="598.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" text="calm1" />
+                                    <Button layoutX="-2.0" layoutY="23.0" mnemonicParsing="false" text="calm2" />
+                                    <Button layoutX="-2.0" layoutY="46.0" mnemonicParsing="false" text="calm3" />
+                                    <Button layoutY="69.0" mnemonicParsing="false" text="hal1" />
+                                    <Button layoutY="92.0" mnemonicParsing="false" text="hal2" />
+                                    <Button layoutY="115.0" mnemonicParsing="false" text="hal3" />
+                                    <Button layoutY="140.0" mnemonicParsing="false" text="hal4" />
+                                    <Button layoutY="163.0" mnemonicParsing="false" text="nuance1" />
+                                    <Button layoutY="186.0" mnemonicParsing="false" text="nuance2" />
+                                    <Button layoutX="-3.0" layoutY="209.0" mnemonicParsing="false" text="piano1" />
+                                    <Button layoutX="-3.0" layoutY="232.0" mnemonicParsing="false" text="piano2" />
+                                    <Button layoutX="-3.0" layoutY="255.0" mnemonicParsing="false" text="piano3" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" text="创造">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                      <TitledPane animated="false" prefHeight="175.0" prefWidth="600.0" text="untitled 3">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+               </children></AnchorPane>
         </content>
       </Tab>
       <Tab text="导出">
