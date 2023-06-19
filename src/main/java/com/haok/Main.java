@@ -65,7 +65,7 @@ public class Main {
             }
         }
         System.out.println("Finish frame create.");
-        //--------CONFIG--------//
+        //--------PACK CONFIG--------//
         //Set Panel Contents
         JPanel settingPane = new JPanel();
         packName = new TextFiledWithDescribe("资源包名", false, true);
@@ -131,7 +131,7 @@ public class Main {
             });
         }
 
-        version = new JComboBox<>();//创建版本下拉框
+        version = new JComboBox<>();//create version combobox
         String[] versions =
                 //Version
                 {"1.13 ~ 1.14.4", "1.15 ~ 1.16.1", "1.16.2 ~ 1.16.5", "1.17 ~ 1.17.1", "1.18 ~ 1.18.2", "1.19 ~ 1.19.2", "1.19.3 ~ 22w44a", "1.19.3 ~ 1.19.4(23w07a)", "1.19.4 ~ 23w13a", "1.20(23w14a) ~ 1.20(23w16a)", "1.20"};
@@ -141,7 +141,7 @@ public class Main {
             version.addItem(v);
             System.out.println(v);
         }
-        config.put(ConfigDataType.VERSION,String.valueOf(4));
+        config.put(ConfigDataType.VERSION, String.valueOf(4));
         //set version data config when user choose a version number
         version.addItemListener(e -> {
             int index = versionList.indexOf(e.getItem());
@@ -177,7 +177,7 @@ public class Main {
                 iconView.setImage(iconView.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 iconLabel.setIcon(iconView);
                 //set image config when user choose an icon image
-                config.put(ConfigDataType.ICON,f.getAbsolutePath());
+                config.put(ConfigDataType.ICON, f.getAbsolutePath());
             } else {
                 icon.doRemove();
                 JOptionPane.showMessageDialog(frame, "图片必须为正方形", "", JOptionPane.INFORMATION_MESSAGE);
@@ -192,7 +192,7 @@ public class Main {
         settingPane.add(describe);
         settingPane.add(comboPanel);
         settingPane.add(icon);
-        pane.addTab("配置", settingPane);
+        pane.addTab("资源包选项", settingPane);
         System.out.println("Finish Config UI set.");
         //--------FONT--------//
         JPanel fontPanel = new JPanel();
@@ -281,14 +281,6 @@ public class Main {
         pane.addTab("字体", fontPanel);
         System.out.println("Finish Font UI set.");
         //--------MAIN MENU PICTURE--------//
-        TextFiledWithDescribe front = new TextFiledWithDescribe("前    /tp @p ~ ~ ~ 0 0", true, false);
-        front.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
-        front.getDescribe().setToolTipText("点击复制指令");
-        front.setChooserFilter(PNG_FILE_FILTER);
-        front.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.FRONT, file.getAbsolutePath());
-        });
 
         /*
         main menu picture choose text filed
@@ -297,6 +289,15 @@ public class Main {
         3.add on mouse listener
         4.set select file listener
         */
+
+        TextFiledWithDescribe front = new TextFiledWithDescribe("前    /tp @p ~ ~ ~ 0 0", true, false);
+        front.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
+        front.getDescribe().setToolTipText("点击复制指令");
+        front.setChooserFilter(PNG_FILE_FILTER);
+        front.setSelectFileListener(file -> {
+            System.out.println("Read an image:\n" + file.getAbsolutePath());
+            config.put(MainMenuPictureDataType.FRONT, file.getAbsolutePath());
+        });
 
         TextFiledWithDescribe behind = new TextFiledWithDescribe("后    /tp @p ~ ~ ~ 180 0", true, false);
         behind.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 180 0"));
@@ -364,6 +365,26 @@ public class Main {
         mainMenuScroll.add(mainMenuBackgroundPanel);
         pane.addTab("主菜单全景图", mainMenuScroll);
         System.out.println("Finish Menu Background Photo UI set.");
+        //--------MAKE--------
+        JPanel savePanel = new JPanel();
+        TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
+        packPath.isShowSaveDialog(true);
+        JCheckBox isZip = new JCheckBox("制作为Zip压缩文件。");
+        isZip.setPreferredSize(new Dimension(300,25));
+        isZip.addActionListener(e -> {
+            if (isZip.isSelected()) {
+                System.out.println("Is zip!");
+            } else {
+                System.out.println("Not zip!");
+            }
+        });
+        JProgressBar progressBar = new JProgressBar();
+        progressBar.setPreferredSize(new Dimension(300,25));
+        progressBar.setString("制作进度");
+        savePanel.add(packPath);
+        savePanel.add(isZip);
+        savePanel.add(progressBar);
+        pane.addTab("保存", savePanel);
         //set frame visible
         frame.setVisible(true);
     }

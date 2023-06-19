@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Objects;
 
 public class TextFiledWithDescribe extends JPanel {
     private final JTextField textField;
@@ -17,9 +18,13 @@ public class TextFiledWithDescribe extends JPanel {
     private SelectFileListener listener;
     private RemoveFileListener removeFileListener;
     private final JButton remove;
+    private boolean isShowSaveDialog = false;
 
     public JTextField getTextField() {
         return textField;
+    }
+    public void isShowSaveDialog(boolean b){
+        isShowSaveDialog = b;
     }
 
     public TextFiledWithDescribe(String describe, boolean hasButton, boolean editable) {
@@ -44,9 +49,16 @@ public class TextFiledWithDescribe extends JPanel {
         JButton open = new JButton("浏览");
         chooser = new JFileChooser();
         ActionListener actionListener = e -> {
-            if (chooser.showOpenDialog(Main.frame) == JFileChooser.APPROVE_OPTION) {
-                File file = chooser.getSelectedFile();
-                text = file.getAbsolutePath();
+            int target;
+            if (isShowSaveDialog){
+                target = chooser.showSaveDialog(Main.frame);
+            }else {
+                target = chooser.showOpenDialog(Main.frame);
+            }
+            if (target == JFileChooser.APPROVE_OPTION) {
+                File file = null;
+                file = chooser.getSelectedFile();
+                text = Objects.requireNonNull(file).getAbsolutePath();
                 textField.setText(file.getAbsolutePath());
                 remove.setVisible(true);
                 try {
