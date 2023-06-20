@@ -2,9 +2,11 @@ package com.haok;
 
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
+import com.haok.pack.PackMaker;
 import com.haok.pack.data.type.ConfigDataType;
 import com.haok.pack.data.type.FontDataType;
 import com.haok.pack.data.type.MainMenuPictureDataType;
+import com.haok.pack.data.type.SaveConfigDataType;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -29,6 +31,7 @@ import java.util.regex.Pattern;
 import static com.haok.Config.*;
 
 public class Main {
+    public static final PackConfig config = new PackConfig();
     public static JFrame frame;
     public static TextFiledWithDescribe describe;
     public static TextFiledWithDescribe packName;
@@ -37,7 +40,6 @@ public class Main {
     public static TextFiledWithDescribe font;
     public static JTextField fontView;
     public static Font microsoftYaheiFont = null;
-    public static PackConfig config = new PackConfig();
 
     public static void main(String[] args) {
         try {
@@ -76,10 +78,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        config.put(
-                                ConfigDataType.PACK_NAME,
-                                e.getDocument().getText(0, e.getDocument().getLength())
-                        );
+                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -107,10 +106,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        config.put(
-                                ConfigDataType.DESCRIBE,
-                                e.getDocument().getText(0, e.getDocument().getLength())
-                        );
+                        config.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -144,7 +140,7 @@ public class Main {
         config.put(ConfigDataType.VERSION, String.valueOf(4));
         //set version data config when user choose a version number
         version.addItemListener(e -> {
-            int index = versionList.indexOf(e.getItem());
+            int index = versionList.indexOf(String.valueOf(e.getItem()));
             int versionNumber;
             if (index < 6) {
                 versionNumber = index + 4;
@@ -205,8 +201,10 @@ public class Main {
         font = new TextFiledWithDescribe("字体", true, false);
         font.setChooserFilter(TTF_FILE_FILTER);
         fontView = new JTextField("A quickly brown fox jumps over a lazy dog.");
+        JScrollPane fontViewPane = new JScrollPane(fontView);
         JLabel fontViewLabel = new JLabel("预览:");
         JComboBox<String> fonts = new JComboBox<>();
+        fonts.addItem("请选择");
         //font files list
         List<File> fontFiles = Utils.getSystemFonts();
         //font objects list
@@ -237,7 +235,11 @@ public class Main {
             config.put(FontDataType.NAME, fontName);
         });
         font.setRemoveFileListener(() -> {
-            if (microsoftYaheiFont != null) fontView.setFont(microsoftYaheiFont.deriveFont(20f));
+            if (microsoftYaheiFont != null) {
+                fontView.setFont(microsoftYaheiFont.deriveFont(20f));
+            }
+            config.put(FontDataType.NAME, null);
+            config.put(FontDataType.FILE_PATH, null);
         });
         chooseSystemFont.addItemListener(e -> {
             font.setVisible(!font.isVisible());
@@ -249,7 +251,14 @@ public class Main {
         });
         fonts.addItemListener(e -> {
             // choose system font preview
-            int index = fontsNameList.indexOf(e.getItem());
+            int index;
+            if (e.getItem().equals(fonts.getItemAt(0))) {
+                config.put(FontDataType.FILE_PATH, null);
+                config.put(FontDataType.NAME, null);
+                return;
+            } else {
+                index = fontsNameList.indexOf(String.valueOf(e.getItem()));
+            }
             Font f = fontList.get(index).deriveFont(20f);
             System.out.println("Read a font:" + f.getName());
             f = f.deriveFont(20.0f);
@@ -276,7 +285,7 @@ public class Main {
         fontChoosePanel.add(fonts);
 
         fontChoosePanel.add(fontViewLabel);
-        fontChoosePanel.add(fontView);
+        fontChoosePanel.add(fontViewPane);
         fontPanel.add(fontChoosePanel);
         pane.addTab("字体", fontPanel);
         System.out.println("Finish Font UI set.");
@@ -365,28 +374,29 @@ public class Main {
         mainMenuScroll.add(mainMenuBackgroundPanel);
         pane.addTab("主菜单全景图", mainMenuScroll);
         System.out.println("Finish Menu Background Photo UI set.");
-        //--------MAKE--------
+        //--------MAKE--------//
         JPanel savePanel = new JPanel();
         TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
         packPath.isShowSaveDialog(true);
+        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH,file.getAbsolutePath()));
         JCheckBox isZip = new JCheckBox("制作为Zip压缩文件。");
-        isZip.setPreferredSize(new Dimension(300,25));
-        isZip.addActionListener(e -> {
-            if (isZip.isSelected()) {
-                System.out.println("Is zip!");
-            } else {
-                System.out.println("Not zip!");
+        isZip.setPreferredSize(new Dimension(300, 25));
+        isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
+        JButton save = new JButton("保存");
+        save.addActionListener(e -> {
+            try {
+                PackMaker.make(config);
+            } catch (IOException ex) {
+                Utils.exceptionHandle(ex);
             }
         });
-        JProgressBar progressBar = new JProgressBar();
-        progressBar.setPreferredSize(new Dimension(300,25));
-        progressBar.setString("制作进度");
         savePanel.add(packPath);
         savePanel.add(isZip);
-        savePanel.add(progressBar);
+        savePanel.add(save);
         pane.addTab("保存", savePanel);
         //set frame visible
         frame.setVisible(true);
+        System.out.println(Main.class.getModule());
     }
 
     /**
