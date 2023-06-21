@@ -1,5 +1,6 @@
 package com.haok;
 
+import com.haok.components.NumberDocument;
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
 import com.haok.pack.PackMaker;
@@ -361,8 +362,9 @@ public class Main {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
             config.put(MainMenuPictureDataType.OVER, file.getAbsolutePath());
         });
-
-        JPanel mainMenuBackgroundPanel = new JPanel(new GridLayout(7, 1, 0, 10));
+        TextFiledWithDescribe vague = new TextFiledWithDescribe("模糊等级(0 ~ 64)",false,true);
+        vague.getTextField().setDocument(new NumberDocument(64));
+        JPanel mainMenuBackgroundPanel = new JPanel(new GridLayout(8, 1, 0, 10));
         mainMenuBackgroundPanel.add(front);
         mainMenuBackgroundPanel.add(behind);
         mainMenuBackgroundPanel.add(left);
@@ -370,16 +372,18 @@ public class Main {
         mainMenuBackgroundPanel.add(up);
         mainMenuBackgroundPanel.add(down);
         mainMenuBackgroundPanel.add(pictureOver);
+        mainMenuBackgroundPanel.add(vague);
         ScrollPane mainMenuScroll = new ScrollPane();
         mainMenuScroll.add(mainMenuBackgroundPanel);
         pane.addTab("主菜单全景图", mainMenuScroll);
         System.out.println("Finish Menu Background Photo UI set.");
         //--------MAKE--------//
+
         JPanel savePanel = new JPanel();
         TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
         packPath.isShowSaveDialog(true);
         packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
-        JCheckBox isZip = new JCheckBox("制作为Zip压缩文件。");
+        JCheckBox isZip = new JCheckBox("制作为Zip压缩文件");
         isZip.setPreferredSize(new Dimension(300, 25));
         isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
         JButton save = new JButton("保存");

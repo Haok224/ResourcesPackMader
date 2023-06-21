@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="928c68cf-5ad4-46f0-81d7-ac7fb02c5b57" name="Changes" comment="完善ui">
+    <list default="true" id="928c68cf-5ad4-46f0-81d7-ac7fb02c5b57" name="Changes" comment="font make">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/haok/components/NumberDocument.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/components/TextFiledWithDescribe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/components/TextFiledWithDescribe.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,8 +82,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -185,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687264900013</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="font make">
+      <created>1687344749885</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1687344749885</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,7 +209,8 @@
     <MESSAGE value="使用swing重构" />
     <MESSAGE value="add save ui" />
     <MESSAGE value="完善ui" />
-    <option name="LAST_COMMIT_MESSAGE" value="完善ui" />
+    <MESSAGE value="font make" />
+    <option name="LAST_COMMIT_MESSAGE" value="font make" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
