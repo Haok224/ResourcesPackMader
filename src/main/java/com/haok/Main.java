@@ -378,7 +378,7 @@ public class Main {
         JPanel savePanel = new JPanel();
         TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
         packPath.isShowSaveDialog(true);
-        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH,file.getAbsolutePath()));
+        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
         JCheckBox isZip = new JCheckBox("制作为Zip压缩文件。");
         isZip.setPreferredSize(new Dimension(300, 25));
         isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));

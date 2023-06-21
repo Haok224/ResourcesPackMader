@@ -25,14 +25,15 @@ public class Utils {
         PrintWriter writer = new PrintWriter(strWriter);
         t.printStackTrace(writer);
         String message = strWriter.toString();
-        JOptionPane.showMessageDialog(Main.frame, "错误:\n"+message, Config.TITLE, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(Main.frame, "错误:\n" + message, Config.TITLE, JOptionPane.ERROR_MESSAGE);
     }
-    public static void copy(File source,File target) throws IOException{
+
+    public static void copy(File source, File target) throws IOException {
         FileInputStream inputStream = new FileInputStream(source);
         FileOutputStream outputStream = new FileOutputStream(target);
         FileChannel input = inputStream.getChannel();
         FileChannel output = outputStream.getChannel();
-        output.transferFrom(input,0,input.size());
+        output.transferFrom(input, 0, input.size());
         inputStream.close();
         outputStream.close();
     }

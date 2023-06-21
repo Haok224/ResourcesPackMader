@@ -14,18 +14,11 @@ public class TextFiledWithDescribe extends JPanel {
 
     private final JFileChooser chooser;
     private final JLabel describe;
+    private final JButton remove;
     private String text;
     private SelectFileListener listener;
     private RemoveFileListener removeFileListener;
-    private final JButton remove;
     private boolean isShowSaveDialog = false;
-
-    public JTextField getTextField() {
-        return textField;
-    }
-    public void isShowSaveDialog(boolean b){
-        isShowSaveDialog = b;
-    }
 
     public TextFiledWithDescribe(String describe, boolean hasButton, boolean editable) {
         this.setLayout(new BorderLayout());
@@ -50,13 +43,13 @@ public class TextFiledWithDescribe extends JPanel {
         chooser = new JFileChooser();
         ActionListener actionListener = e -> {
             int target;
-            if (isShowSaveDialog){
+            if (isShowSaveDialog) {
                 target = chooser.showSaveDialog(Main.frame);
-            }else {
+            } else {
                 target = chooser.showOpenDialog(Main.frame);
             }
             if (target == JFileChooser.APPROVE_OPTION) {
-                File file = null;
+                File file;
                 file = chooser.getSelectedFile();
                 text = Objects.requireNonNull(file).getAbsolutePath();
                 textField.setText(file.getAbsolutePath());
@@ -81,6 +74,14 @@ public class TextFiledWithDescribe extends JPanel {
         }
     }
 
+    public JTextField getTextField() {
+        return textField;
+    }
+
+    public void isShowSaveDialog(boolean b) {
+        isShowSaveDialog = b;
+    }
+
     public JLabel getDescribe() {
         return describe;
     }
@@ -100,7 +101,8 @@ public class TextFiledWithDescribe extends JPanel {
     public void setRemoveFileListener(RemoveFileListener listener) {
         this.removeFileListener = listener;
     }
-    public void doRemove(){
+
+    public void doRemove() {
         textField.setText("");
         remove.setVisible(false);
         if (removeFileListener != null) removeFileListener.onRemoveFile();
