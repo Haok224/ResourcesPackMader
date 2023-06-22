@@ -25,10 +25,15 @@ public class Utils {
         PrintWriter writer = new PrintWriter(strWriter);
         t.printStackTrace(writer);
         String message = strWriter.toString();
-        JOptionPane.showMessageDialog(Main.frame, "错误:\n" + message, Config.TITLE, JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(Main.frame, "错误:\n" + message, FileFilters.TITLE, JOptionPane.ERROR_MESSAGE);
     }
-
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void copy(File source, File target) throws IOException {
+        if (!target.exists()){
+            File file = target.getParentFile();
+            file.mkdirs();
+            target.createNewFile();
+        }
         FileInputStream inputStream = new FileInputStream(source);
         FileOutputStream outputStream = new FileOutputStream(target);
         FileChannel input = inputStream.getChannel();
@@ -36,5 +41,12 @@ public class Utils {
         output.transferFrom(input, 0, input.size());
         inputStream.close();
         outputStream.close();
+    }
+    public static void write(File file,String content) throws  IOException{
+        System.out.println("Create target file:"+file.createNewFile());
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        writer.write(content);
+        writer.flush();
+        writer.close();
     }
 }

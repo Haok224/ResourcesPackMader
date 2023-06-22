@@ -22,17 +22,22 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.haok.Config.*;
+import static com.haok.FileFilters.PNG_FILE_FILTER;
+import static com.haok.FileFilters.TTF_FILE_FILTER;
 
 public class Main {
     public static final PackConfig config = new PackConfig();
+    public static final Properties PROPERTIES = new Properties();
     public static JFrame frame;
     public static TextFiledWithDescribe describe;
     public static TextFiledWithDescribe packName;
@@ -41,6 +46,20 @@ public class Main {
     public static TextFiledWithDescribe font;
     public static JTextField fontView;
     public static Font microsoftYaheiFont = null;
+    public static JTabbedPane pane;
+
+    static {
+        try {
+            PROPERTIES.load(
+                    new BufferedReader(new InputStreamReader(
+                            Objects.requireNonNull(
+                                    Main.class.getResourceAsStream("/com/haok/maker.properties")),
+                            StandardCharsets.UTF_8)
+                    ));
+        } catch (IOException e) {
+            Utils.exceptionHandle(e);
+        }
+    }
 
     public static void main(String[] args) {
         try {
@@ -50,13 +69,13 @@ public class Main {
             Utils.exceptionHandle(e);
         }
         //Create Frame
-        frame = new JFrame(TITLE);
+        frame = new JFrame(PROPERTIES.get("title").toString());
         frame.setIconImage(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/com/haok/logo.png"))).getImage());
         //Main Frame
-        JTabbedPane pane = new JTabbedPane();
+        pane = new JTabbedPane();
         frame.setContentPane(pane);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        frame.setSize(Integer.parseInt(PROPERTIES.get("width").toString()), Integer.parseInt(PROPERTIES.get("height").toString()));
         frame.setLocationRelativeTo(null);  //Windows Center
         frame.setResizable(false);  //Frame Not Resizeable
         String[] fontsName = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -362,7 +381,7 @@ public class Main {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
             config.put(MainMenuPictureDataType.OVER, file.getAbsolutePath());
         });
-        TextFiledWithDescribe vague = new TextFiledWithDescribe("模糊等级(0 ~ 64)",false,true);
+        TextFiledWithDescribe vague = new TextFiledWithDescribe("模糊等级(0 ~ 64)", false, true);
         vague.getTextField().setDocument(new NumberDocument(64));
         JPanel mainMenuBackgroundPanel = new JPanel(new GridLayout(8, 1, 0, 10));
         mainMenuBackgroundPanel.add(front);
@@ -377,6 +396,7 @@ public class Main {
         mainMenuScroll.add(mainMenuBackgroundPanel);
         pane.addTab("主菜单全景图", mainMenuScroll);
         System.out.println("Finish Menu Background Photo UI set.");
+
         //--------MAKE--------//
 
         JPanel savePanel = new JPanel();
@@ -387,6 +407,7 @@ public class Main {
         isZip.setPreferredSize(new Dimension(300, 25));
         isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
         JButton save = new JButton("保存");
+        save.setPreferredSize(new Dimension(300, 25));
         save.addActionListener(e -> {
             try {
                 PackMaker.make(config);
@@ -400,7 +421,6 @@ public class Main {
         pane.addTab("保存", savePanel);
         //set frame visible
         frame.setVisible(true);
-        System.out.println(Main.class.getModule());
     }
 
     /**

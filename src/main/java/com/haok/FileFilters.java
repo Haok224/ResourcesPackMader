@@ -3,9 +3,7 @@ package com.haok;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-public interface Config {
-    int WINDOW_WIDTH = 550;
-    int WINDOW_HEIGHT = 400;
+public interface FileFilters {
 
     FileFilter PNG_FILE_FILTER = new FileFilter() {
         @Override
