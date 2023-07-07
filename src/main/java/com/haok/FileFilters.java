@@ -3,6 +3,10 @@ package com.haok;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
+/**
+ * @author Haok224
+ *
+ */
 public interface FileFilters {
 
     FileFilter PNG_FILE_FILTER = new FileFilter() {
@@ -28,5 +32,4 @@ public interface FileFilters {
             return "TrueType字体文件(*.ttf)";
         }
     };
-    String TITLE = "资源包制作器";
 }

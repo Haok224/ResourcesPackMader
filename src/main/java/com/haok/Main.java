@@ -1,12 +1,11 @@
 package com.haok;
 
-import com.haok.components.NumberDocument;
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
 import com.haok.pack.PackMaker;
 import com.haok.pack.data.type.ConfigDataType;
 import com.haok.pack.data.type.FontDataType;
-import com.haok.pack.data.type.MainMenuPictureDataType;
+import com.haok.pack.data.type.PanoramaDataType;
 import com.haok.pack.data.type.SaveConfigDataType;
 
 import javax.imageio.ImageIO;
@@ -36,7 +35,7 @@ import static com.haok.FileFilters.PNG_FILE_FILTER;
 import static com.haok.FileFilters.TTF_FILE_FILTER;
 
 public class Main {
-    public static final PackConfig config = new PackConfig();
+    public static final PackConfig CONFIG = new PackConfig();
     public static final Properties PROPERTIES = new Properties();
     public static JFrame frame;
     public static TextFiledWithDescribe describe;
@@ -81,7 +80,7 @@ public class Main {
         String[] fontsName = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         //Set font
         for (String s : fontsName) {
-            if (s.equals("微软雅黑")) {
+            if ("微软雅黑".equals(s)) {
                 microsoftYaheiFont = new Font("微软雅黑", Font.PLAIN, 13);
                 initGlobalFont(microsoftYaheiFont);
             }
@@ -98,7 +97,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -107,7 +106,7 @@ public class Main {
                 @Override
                 public void removeUpdate(DocumentEvent e) {
                     try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -126,7 +125,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        config.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
+                        CONFIG.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -135,7 +134,7 @@ public class Main {
                 @Override
                 public void removeUpdate(DocumentEvent e) {
                     try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -157,7 +156,7 @@ public class Main {
             version.addItem(v);
             System.out.println(v);
         }
-        config.put(ConfigDataType.VERSION, String.valueOf(4));
+        CONFIG.put(ConfigDataType.VERSION, String.valueOf(4));
         //set version data config when user choose a version number
         version.addItemListener(e -> {
             int index = versionList.indexOf(String.valueOf(e.getItem()));
@@ -167,7 +166,7 @@ public class Main {
             } else {
                 versionNumber = index + 5;
             }
-            config.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
+            CONFIG.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
         });
         //combobox panel
         JPanel comboPanel = new JPanel(new BorderLayout());
@@ -193,7 +192,7 @@ public class Main {
                 iconView.setImage(iconView.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 iconLabel.setIcon(iconView);
                 //set image config when user choose an icon image
-                config.put(ConfigDataType.ICON, f.getAbsolutePath());
+                CONFIG.put(ConfigDataType.ICON, f.getAbsolutePath());
             } else {
                 icon.doRemove();
                 JOptionPane.showMessageDialog(frame, "图片必须为正方形", "", JOptionPane.INFORMATION_MESSAGE);
@@ -251,15 +250,15 @@ public class Main {
             String fontName = f.getFamily();
             fontName = fontName.toLowerCase();
             fontName = fontName.replace(' ', '_');
-            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
-            config.put(FontDataType.NAME, fontName);
+            CONFIG.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+            CONFIG.put(FontDataType.NAME, fontName);
         });
         font.setRemoveFileListener(() -> {
             if (microsoftYaheiFont != null) {
                 fontView.setFont(microsoftYaheiFont.deriveFont(20f));
             }
-            config.put(FontDataType.NAME, null);
-            config.put(FontDataType.FILE_PATH, null);
+            CONFIG.put(FontDataType.NAME, null);
+            CONFIG.put(FontDataType.FILE_PATH, null);
         });
         chooseSystemFont.addItemListener(e -> {
             font.setVisible(!font.isVisible());
@@ -273,8 +272,8 @@ public class Main {
             // choose system font preview
             int index;
             if (e.getItem().equals(fonts.getItemAt(0))) {
-                config.put(FontDataType.FILE_PATH, null);
-                config.put(FontDataType.NAME, null);
+                CONFIG.put(FontDataType.FILE_PATH, null);
+                CONFIG.put(FontDataType.NAME, null);
                 return;
             } else {
                 index = fontsNameList.indexOf(String.valueOf(e.getItem()));
@@ -284,16 +283,16 @@ public class Main {
             f = f.deriveFont(20.0f);
             fontView.setFont(f);
             File file = fontFiles.get(index);
-            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+            CONFIG.put(FontDataType.FILE_PATH, file.getAbsolutePath());
             String fontName = f.getFamily().toLowerCase(Locale.CHINA).replace(' ', '_');
             String regEx = "[^a-zA-Z]";
             Pattern p = Pattern.compile(regEx);
             Matcher m = p.matcher(fontName);
             boolean notAllLetter = m.find();
             if (notAllLetter) {
-                config.put(FontDataType.NAME, "font");
+                CONFIG.put(FontDataType.NAME, "font");
             } else {
-                config.put(FontDataType.NAME, fontName);
+                CONFIG.put(FontDataType.NAME, fontName);
             }
         });
         chooseFontFile.doClick();
@@ -319,58 +318,58 @@ public class Main {
         4.set select file listener
         */
 
-        TextFiledWithDescribe front = new TextFiledWithDescribe("前    /tp @p ~ ~ ~ 0 0", true, false);
-        front.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
-        front.getDescribe().setToolTipText("点击复制指令");
-        front.setChooserFilter(PNG_FILE_FILTER);
-        front.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan0 = new TextFiledWithDescribe("Panorama 0    /tp @p ~ ~ ~ 0 0", true, false);
+        pan0.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
+        pan0.getDescribe().setToolTipText("点击复制指令");
+        pan0.setChooserFilter(PNG_FILE_FILTER);
+        pan0.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.FRONT, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_0, file.getAbsolutePath());
         });
 
-        TextFiledWithDescribe behind = new TextFiledWithDescribe("后    /tp @p ~ ~ ~ 180 0", true, false);
-        behind.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 180 0"));
-        behind.getDescribe().setToolTipText("点击复制指令");
-        behind.setChooserFilter(PNG_FILE_FILTER);
-        behind.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan2 = new TextFiledWithDescribe("Panorama 2    /tp @p ~ ~ ~ 180 0", true, false);
+        pan2.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 180 0"));
+        pan2.getDescribe().setToolTipText("点击复制指令");
+        pan2.setChooserFilter(PNG_FILE_FILTER);
+        pan2.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.BEHIND, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_1, file.getAbsolutePath());
         });
 
-        TextFiledWithDescribe left = new TextFiledWithDescribe("左    /tp @p ~ ~ ~ -90 0", true, false);
-        left.setChooserFilter(PNG_FILE_FILTER);
-        left.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 0"));
-        left.getDescribe().setToolTipText("点击复制指令");
-        left.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan3 = new TextFiledWithDescribe("Panorama 3    /tp @p ~ ~ ~ -90 0", true, false);
+        pan3.setChooserFilter(PNG_FILE_FILTER);
+        pan3.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 0"));
+        pan3.getDescribe().setToolTipText("点击复制指令");
+        pan3.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.LEFT, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_2, file.getAbsolutePath());
         });
 
-        TextFiledWithDescribe right = new TextFiledWithDescribe("右    /tp @p ~ ~ ~ 90 0", true, false);
-        right.setChooserFilter(PNG_FILE_FILTER);
-        right.addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 90 0"));
-        right.getDescribe().setToolTipText("点击复制指令");
-        right.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan1 = new TextFiledWithDescribe("Panorama 1    /tp @p ~ ~ ~ 90 0", true, false);
+        pan1.setChooserFilter(PNG_FILE_FILTER);
+        pan1.addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 90 0"));
+        pan1.getDescribe().setToolTipText("点击复制指令");
+        pan1.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.RIGHT, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_3, file.getAbsolutePath());
         });
 
-        TextFiledWithDescribe up = new TextFiledWithDescribe("上    /tp @p ~ ~ ~ -90 -90", true, false);
-        up.setChooserFilter(PNG_FILE_FILTER);
-        up.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 -90"));
-        up.getDescribe().setToolTipText("点击复制指令");
-        up.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan4 = new TextFiledWithDescribe("Panorama 4    /tp @p ~ ~ ~ 0 -90", true, false);
+        pan4.setChooserFilter(PNG_FILE_FILTER);
+        pan4.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 -90"));
+        pan4.getDescribe().setToolTipText("点击复制指令");
+        pan4.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.UP, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_4, file.getAbsolutePath());
         });
 
-        TextFiledWithDescribe down = new TextFiledWithDescribe("下    /tp @p ~ ~ ~ -90 90", true, false);
-        down.setChooserFilter(PNG_FILE_FILTER);
-        down.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 90"));
-        down.getDescribe().setToolTipText("点击复制指令");
-        down.setSelectFileListener(file -> {
+        TextFiledWithDescribe pan5 = new TextFiledWithDescribe("Panorama 5    /tp @p ~ ~ ~ 0 90", true, false);
+        pan5.setChooserFilter(PNG_FILE_FILTER);
+        pan5.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 90"));
+        pan5.getDescribe().setToolTipText("点击复制指令");
+        pan5.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.DOWN, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.PANORAMA_5, file.getAbsolutePath());
         });
 
         //picture over background
@@ -379,17 +378,16 @@ public class Main {
         pictureOver.setChooserFilter(PNG_FILE_FILTER);
         pictureOver.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(MainMenuPictureDataType.OVER, file.getAbsolutePath());
+            CONFIG.put(PanoramaDataType.OVER, file.getAbsolutePath());
         });
-        TextFiledWithDescribe vague = new TextFiledWithDescribe("模糊等级(0 ~ 64)", false, true);
-        vague.getTextField().setDocument(new NumberDocument(64));
+        JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL,0,1,0,64);
         JPanel mainMenuBackgroundPanel = new JPanel(new GridLayout(8, 1, 0, 10));
-        mainMenuBackgroundPanel.add(front);
-        mainMenuBackgroundPanel.add(behind);
-        mainMenuBackgroundPanel.add(left);
-        mainMenuBackgroundPanel.add(right);
-        mainMenuBackgroundPanel.add(up);
-        mainMenuBackgroundPanel.add(down);
+        mainMenuBackgroundPanel.add(pan0);
+        mainMenuBackgroundPanel.add(pan2);
+        mainMenuBackgroundPanel.add(pan3);
+        mainMenuBackgroundPanel.add(pan1);
+        mainMenuBackgroundPanel.add(pan4);
+        mainMenuBackgroundPanel.add(pan5);
         mainMenuBackgroundPanel.add(pictureOver);
         mainMenuBackgroundPanel.add(vague);
         ScrollPane mainMenuScroll = new ScrollPane();
@@ -402,15 +400,15 @@ public class Main {
         JPanel savePanel = new JPanel();
         TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
         packPath.isShowSaveDialog(true);
-        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
+        packPath.setSelectFileListener(file -> CONFIG.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
         JCheckBox isZip = new JCheckBox("制作为Zip压缩文件");
         isZip.setPreferredSize(new Dimension(300, 25));
-        isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
+        isZip.addActionListener(e -> CONFIG.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
         JButton save = new JButton("保存");
         save.setPreferredSize(new Dimension(300, 25));
         save.addActionListener(e -> {
             try {
-                PackMaker.make(config);
+                PackMaker.make(CONFIG);
             } catch (IOException ex) {
                 Utils.exceptionHandle(ex);
             }
@@ -455,7 +453,9 @@ class CopyHandle implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (!(e.getButton() == MouseEvent.BUTTON1)) return;
+        if (!(e.getButton() == MouseEvent.BUTTON1)) {
+            return;
+        }
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection string = new StringSelection(data);
         clipboard.setContents(string, null);

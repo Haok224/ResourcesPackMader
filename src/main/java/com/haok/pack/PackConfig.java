@@ -2,14 +2,14 @@ package com.haok.pack;
 
 import com.haok.pack.data.type.ConfigDataType;
 import com.haok.pack.data.type.FontDataType;
-import com.haok.pack.data.type.MainMenuPictureDataType;
+import com.haok.pack.data.type.PanoramaDataType;
 import com.haok.pack.data.type.SaveConfigDataType;
 
 import java.util.HashMap;
 
 public class PackConfig {
     final HashMap<FontDataType, String> fontData = new HashMap<>();
-    final HashMap<MainMenuPictureDataType, String> mmpData = new HashMap<>();
+    final HashMap<PanoramaDataType, String> mmpData = new HashMap<>();
     final HashMap<ConfigDataType, String> configData = new HashMap<>();
     final HashMap<SaveConfigDataType, String> saveConfigData = new HashMap<>();
 
@@ -18,7 +18,7 @@ public class PackConfig {
         System.out.println("Key is:" + key + "\nValue is:" + value);
     }
 
-    public void put(MainMenuPictureDataType key, String value) {
+    public void put(PanoramaDataType key, String value) {
         mmpData.put(key, value);
         System.out.println("Key is:" + key + "\nValue is:" + value);
     }
@@ -37,7 +37,7 @@ public class PackConfig {
         return fontData.get(key);
     }
 
-    public String get(MainMenuPictureDataType key) {
+    public String get(PanoramaDataType key) {
         return mmpData.get(key);
     }
 

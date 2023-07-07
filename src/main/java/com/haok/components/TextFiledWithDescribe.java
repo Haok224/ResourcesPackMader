@@ -35,7 +35,9 @@ public class TextFiledWithDescribe extends JPanel {
         remove.addActionListener(e -> {
             textField.setText("");
             remove.setVisible(false);
-            if (removeFileListener != null) removeFileListener.onRemoveFile();
+            if (removeFileListener != null) {
+                removeFileListener.onRemoveFile();
+            }
             System.out.println(this + "\nremove file.");
         });
         //browse button
@@ -105,7 +107,9 @@ public class TextFiledWithDescribe extends JPanel {
     public void doRemove() {
         textField.setText("");
         remove.setVisible(false);
-        if (removeFileListener != null) removeFileListener.onRemoveFile();
+        if (removeFileListener != null) {
+            removeFileListener.onRemoveFile();
+        }
         System.out.println(this + "\nremove file.");
     }
 

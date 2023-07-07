@@ -4,7 +4,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.PlainDocument;
 
 public class NumberDocument extends PlainDocument {
-    int max;
+    final int max;
+
     public NumberDocument(int max) {
         super();
         this.max = max;
@@ -26,9 +27,9 @@ public class NumberDocument extends PlainDocument {
             // insert content
             super.insertString(offset, new String(s, 0, length), attr);
         }
-        int num = Integer.parseInt(getText(0,getLength()));
-        if (num > max){
-            this.remove(0,getLength());
+        int num = Integer.parseInt(getText(0, getLength()));
+        if (num > max) {
+            this.remove(0, getLength());
         }
     }
 }
