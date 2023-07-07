@@ -380,9 +380,9 @@ public class Main {
         GridLayout layout = new GridLayout(10, 1, 0, 10);
         JPanel mainMenuBackgroundPanel = new JPanel(layout);
         mainMenuBackgroundPanel.add(pan0);
+        mainMenuBackgroundPanel.add(pan1);
         mainMenuBackgroundPanel.add(pan2);
         mainMenuBackgroundPanel.add(pan3);
-        mainMenuBackgroundPanel.add(pan1);
         mainMenuBackgroundPanel.add(pan4);
         mainMenuBackgroundPanel.add(pan5);
         mainMenuBackgroundPanel.add(pictureOver);
@@ -398,6 +398,19 @@ public class Main {
         pane.addTab("主菜单全景图", mainMenuScroll);
         System.out.println("Finish Menu Background Photo UI set.");
 
+        //--------Custom Loading Background--------//
+
+        JPanel loading = new JPanel();
+        TextFiledWithDescribe overworld = new TextFiledWithDescribe("主世界",true,false);
+        TextFiledWithDescribe nether = new TextFiledWithDescribe("下界",true,false);
+        TextFiledWithDescribe end = new TextFiledWithDescribe("末地",true,false);
+        JCheckBox isGrid = new JCheckBox("网格");
+        loading.add(overworld);
+        loading.add(nether);
+        loading.add(end);
+        loading.add(isGrid);
+        pane.addTab("自定义加载界面",loading);
+
         //--------MAKE--------//
 
         JPanel savePanel = new JPanel();
@@ -410,11 +423,15 @@ public class Main {
         JButton save = new JButton("保存");
         save.setPreferredSize(new Dimension(300, 25));
         save.addActionListener(e -> {
-            try {
-                PackMaker.make(CONFIG);
-            } catch (IOException ex) {
-                Utils.exceptionHandle(ex);
-            }
+            Thread t = new Thread(() -> {
+                try {
+                    PackMaker.make(CONFIG);
+                } catch (Exception ex) {
+                    Utils.exceptionHandle(ex);
+                }
+            });
+            t.setName("make");
+            t.start();
         });
 
         savePanel.add(packPath);

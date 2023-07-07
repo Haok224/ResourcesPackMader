@@ -46,6 +46,7 @@ public class TextFiledWithDescribe extends JPanel {
         ActionListener actionListener = e -> {
             int target;
             if (isShowSaveDialog) {
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 target = chooser.showSaveDialog(Main.frame);
             } else {
                 target = chooser.showOpenDialog(Main.frame);

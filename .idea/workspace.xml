@@ -5,12 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="928c68cf-5ad4-46f0-81d7-ac7fb02c5b57" name="Changes" comment="fix">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/123/pack.mcmeta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resource-pack-maker.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/CustomLoadingBackgroundDataType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/hp.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/hp.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/components/NumberDocument.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/components/TextFiledWithDescribe.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/components/TextFiledWithDescribe.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/PanoramaDataType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/PanoramaDataType.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

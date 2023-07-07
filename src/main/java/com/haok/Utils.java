@@ -3,6 +3,8 @@ package com.haok;
 import javax.swing.*;
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -26,6 +28,32 @@ public class Utils {
         t.printStackTrace(writer);
         String message = strWriter.toString();
         JOptionPane.showMessageDialog(Main.frame, "错误:\n" + message, Main.PROPERTIES.get("title").toString(), JOptionPane.ERROR_MESSAGE);
+        Date date = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-d [hh:mm:ss]");
+        String date_ = format.format(date);
+        StringWriter causeWriter = new StringWriter();
+        PrintWriter pWriter = new PrintWriter(causeWriter);
+        if (t.getCause() != null) {
+            t.getCause().printStackTrace(pWriter);
+        }else {
+            pWriter.write("Null");
+        }
+        String cause = causeWriter.toString();
+        String message_ = t.getMessage();
+        File log = new File("resource-pack-maker.log");
+        try {
+            //noinspection ResultOfMethodCallIgnored
+            log.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            BufferedWriter logWriter = new BufferedWriter(new FileWriter(log,true));
+            logWriter.write(String.format("Date:%s%nCause:%n%s%nMassage:%n%s%nStackTrace:%n%s%n",date_,cause,message_,message));
+            logWriter.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

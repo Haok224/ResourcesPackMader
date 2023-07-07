@@ -20,14 +20,14 @@ public class PackMaker {
             Main.packName.getTextField().requestFocusInWindow();
             return;
         }
-        //pack.mcmeta
         File packPath = new File(config.get(SaveConfigDataType.PACK_PATH), config.get(ConfigDataType.PACK_NAME));
-        if (!packPath.exists()) {
+        if (packPath.getAbsolutePath().isEmpty()) {
             int i = JOptionPane.showConfirmDialog(Main.frame, "保存路径为空，是否在当前目录保存?", Main.PROPERTIES.get("title").toString(), JOptionPane.YES_NO_OPTION);
             if ((i == JOptionPane.NO_OPTION) || (i == JOptionPane.CLOSED_OPTION)) {
                 return;
             }
         }
+        //pack.mcmeta
         System.out.println("Make pack dir:" + packPath.mkdirs());
         File pack_mcmeta = new File(packPath, "pack.mcmeta");
         System.out.println("Make pack.mcmeta:" + pack_mcmeta.createNewFile());
@@ -70,6 +70,11 @@ public class PackMaker {
                     }
                     """, config.get(FontDataType.NAME)));
         }
+        //pack icon image
+        if (config.get(ConfigDataType.ICON) != null){
+            Utils.copy(new File(config.get(ConfigDataType.ICON)),new File(packPath,"pack.png"));
+        }
+        //panorama
         {
             String pan0 = config.get(PanoramaDataType.PANORAMA_0);
             String pan1 = config.get(PanoramaDataType.PANORAMA_1);
@@ -77,7 +82,7 @@ public class PackMaker {
             String pan3 = config.get(PanoramaDataType.PANORAMA_3);
             String pan4 = config.get(PanoramaDataType.PANORAMA_4);
             String pan5 = config.get(PanoramaDataType.PANORAMA_5);
-
+            String over = config.get(PanoramaDataType.OVER);
             File background = new File(minecraft, "/textures/gui/title/background");
             System.out.println("Make dir:assets/minecraft/textures/gui/title/background" + background.mkdirs());
             if (pan0 != null) {
@@ -104,6 +109,18 @@ public class PackMaker {
                 File panorama_3 = new File(background, "panorama_3.png");
                 Utils.copy(new File(pan3), panorama_3);
             }
+            if (over != null) {
+                File over_ = new File(background,"panorama_overlay.png");
+                Utils.copy(new File(over),over_);
+            }
         }
+        File panoramaProperties = new File(minecraft,"assets/minecraft/optifine/gui/background.properties");
+        String vague = config.get(PanoramaDataType.VAGUE);
+        if (!"0".equals(vague)){
+            System.out.println("Make Panorama Properties Dir:"+new File(panoramaProperties.getParent()).mkdirs());
+            System.out.println("Make Properties File:"+panoramaProperties.createNewFile());
+            Utils.write(panoramaProperties, String.format("blur1=%s",vague));
+        }
+        JOptionPane.showMessageDialog(Main.frame,"制作完成!",Main.PROPERTIES.get("title").toString(),JOptionPane.INFORMATION_MESSAGE);
     }
 }

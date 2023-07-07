@@ -1,0 +1,46 @@
+Date:2023-07-7 [12:13:15]
+Cause:
+Null
+Massage
+:Test Error
+StackTrace:
+java.lang.RuntimeException: Test Error
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+
+Date:2023-07-7 [12:14:32]
+Cause:
+Null
+Massage:
+Test Error
+StackTrace:
+java.lang.RuntimeException: Test Error
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+
+Date:2023-07-7 [12:15:11]
+Cause:
+java.lang.RuntimeException: Test Error
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+Caused by: java.lang.RuntimeException: Cause
+	... 1 more
+
+Massage:
+Test Error
+StackTrace:
+java.lang.RuntimeException: Test Error
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+Caused by: java.lang.RuntimeException: Cause
+	... 1 more
+
+Date:2023-07-7 [12:16:01]
+Cause:
+java.lang.RuntimeException: Cause
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+
+Massage:
+Test Error
+StackTrace:
+java.lang.RuntimeException: Test Error
+	at com.haok.pack.maker/com.haok.Main.main(Main.java:444)
+Caused by: java.lang.RuntimeException: Cause
+	... 1 more
+
