@@ -61,6 +61,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        //--------Window--------//
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception e) {
@@ -284,6 +285,7 @@ public class Main {
             fontView.setFont(f);
             File file = fontFiles.get(index);
             CONFIG.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+            //Replace BLANK to _
             String fontName = f.getFamily().toLowerCase(Locale.CHINA).replace(' ', '_');
             String regEx = "[^a-zA-Z]";
             Pattern p = Pattern.compile(regEx);
@@ -308,15 +310,7 @@ public class Main {
         fontPanel.add(fontChoosePanel);
         pane.addTab("字体", fontPanel);
         System.out.println("Finish Font UI set.");
-        //--------MAIN MENU PICTURE--------//
-
-        /*
-        main menu picture choose text filed
-        1.create object
-        2.add tip text
-        3.add on mouse listener
-        4.set select file listener
-        */
+        //--------PANORAMA--------//
 
         TextFiledWithDescribe pan0 = new TextFiledWithDescribe("Panorama 0    /tp @p ~ ~ ~ 0 0", true, false);
         pan0.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
@@ -380,8 +374,11 @@ public class Main {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
             CONFIG.put(PanoramaDataType.OVER, file.getAbsolutePath());
         });
-        JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL,0,1,0,64);
-        JPanel mainMenuBackgroundPanel = new JPanel(new GridLayout(8, 1, 0, 10));
+        CONFIG.put(PanoramaDataType.VAGUE,"0");
+        JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL, 0, 1, 0, 65);
+        JLabel vagueValue = new JLabel("0");
+        GridLayout layout = new GridLayout(10, 1, 0, 10);
+        JPanel mainMenuBackgroundPanel = new JPanel(layout);
         mainMenuBackgroundPanel.add(pan0);
         mainMenuBackgroundPanel.add(pan2);
         mainMenuBackgroundPanel.add(pan3);
@@ -389,7 +386,13 @@ public class Main {
         mainMenuBackgroundPanel.add(pan4);
         mainMenuBackgroundPanel.add(pan5);
         mainMenuBackgroundPanel.add(pictureOver);
+        mainMenuBackgroundPanel.add(new JLabel("模糊等级(0~64)  仅Optifine"));
+        mainMenuBackgroundPanel.add(vagueValue);
         mainMenuBackgroundPanel.add(vague);
+        vague.addAdjustmentListener(e -> {
+            CONFIG.put(PanoramaDataType.VAGUE,String.valueOf(e.getValue()));
+            vagueValue.setText(String.valueOf(e.getValue()));
+        });
         ScrollPane mainMenuScroll = new ScrollPane();
         mainMenuScroll.add(mainMenuBackgroundPanel);
         pane.addTab("主菜单全景图", mainMenuScroll);
@@ -413,10 +416,12 @@ public class Main {
                 Utils.exceptionHandle(ex);
             }
         });
+
         savePanel.add(packPath);
         savePanel.add(isZip);
         savePanel.add(save);
         pane.addTab("保存", savePanel);
+
         //set frame visible
         frame.setVisible(true);
     }
@@ -456,8 +461,11 @@ class CopyHandle implements MouseListener {
         if (!(e.getButton() == MouseEvent.BUTTON1)) {
             return;
         }
+        //Get system clipboard
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        //String content
         StringSelection string = new StringSelection(data);
+        //Set clipboard
         clipboard.setContents(string, null);
     }
 

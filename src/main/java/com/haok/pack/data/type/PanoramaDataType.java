@@ -7,5 +7,6 @@ public enum PanoramaDataType {
     PANORAMA_3,
     PANORAMA_4,
     PANORAMA_5,
-    OVER
+    OVER,
+    VAGUE
 }

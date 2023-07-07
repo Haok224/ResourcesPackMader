@@ -22,6 +22,12 @@ public class PackMaker {
         }
         //pack.mcmeta
         File packPath = new File(config.get(SaveConfigDataType.PACK_PATH), config.get(ConfigDataType.PACK_NAME));
+        if (!packPath.exists()) {
+            int i = JOptionPane.showConfirmDialog(Main.frame, "保存路径为空，是否在当前目录保存?", Main.PROPERTIES.get("title").toString(), JOptionPane.YES_NO_OPTION);
+            if ((i == JOptionPane.NO_OPTION) || (i == JOptionPane.CLOSED_OPTION)) {
+                return;
+            }
+        }
         System.out.println("Make pack dir:" + packPath.mkdirs());
         File pack_mcmeta = new File(packPath, "pack.mcmeta");
         System.out.println("Make pack.mcmeta:" + pack_mcmeta.createNewFile());
@@ -65,37 +71,38 @@ public class PackMaker {
                     """, config.get(FontDataType.NAME)));
         }
         {
-            String front = config.get(PanoramaDataType.PANORAMA_0);
-            String behind = config.get(PanoramaDataType.PANORAMA_1);
-            String up = config.get(PanoramaDataType.PANORAMA_2);
-            String down = config.get(PanoramaDataType.PANORAMA_3);
-            String left = config.get(PanoramaDataType.PANORAMA_4);
-            String right = config.get(PanoramaDataType.PANORAMA_5);
-            if (front != null
-                    || behind != null
-                    || up != null
-                    || down != null
-                    || left != null
-                    || right != null
-            ) {
-                File background = new File(minecraft, "/textures/gui/title/background");
-                System.out.println("Make dir:assets/minecraft/textures/gui/title/background" + background.mkdirs());
-                if (front != null) {
-                    File panorama_0 = new File(background, "panorama_0.png");
-                    Utils.copy(new File(front), panorama_0);
-                }
-                if (right != null) {
-                    File panorama_1 = new File(background, "panorama_1.png");
-                    Utils.copy(new File(right), panorama_1);
-                }
-                if (behind != null) {
-                    File panorama_2 = new File(background, "panorama_2.png");
-                    Utils.copy(new File(behind), panorama_2);
-                }
-                if (left != null){
-                    File panorama_3 = new File(background,"panorama_3");
-                    Utils.copy(new File(left),panorama_3);
-                }
+            String pan0 = config.get(PanoramaDataType.PANORAMA_0);
+            String pan1 = config.get(PanoramaDataType.PANORAMA_1);
+            String pan2 = config.get(PanoramaDataType.PANORAMA_2);
+            String pan3 = config.get(PanoramaDataType.PANORAMA_3);
+            String pan4 = config.get(PanoramaDataType.PANORAMA_4);
+            String pan5 = config.get(PanoramaDataType.PANORAMA_5);
+
+            File background = new File(minecraft, "/textures/gui/title/background");
+            System.out.println("Make dir:assets/minecraft/textures/gui/title/background" + background.mkdirs());
+            if (pan0 != null) {
+                File panorama_0 = new File(background, "panorama_0.png");
+                Utils.copy(new File(pan0), panorama_0);
+            }
+            if (pan5 != null) {
+                File panorama_5 = new File(background, "panorama_5.png");
+                Utils.copy(new File(pan5), panorama_5);
+            }
+            if (pan1 != null) {
+                File panorama_1 = new File(background, "panorama_1.png");
+                Utils.copy(new File(pan1), panorama_1);
+            }
+            if (pan4 != null) {
+                File panorama_4 = new File(background, "panorama_4.png");
+                Utils.copy(new File(pan4), panorama_4);
+            }
+            if (pan2 != null) {
+                File panorama_2 = new File(background, "panorama_2.png");
+                Utils.copy(new File(pan2), panorama_2);
+            }
+            if (pan3 != null) {
+                File panorama_3 = new File(background, "panorama_3.png");
+                Utils.copy(new File(pan3), panorama_3);
             }
         }
     }
