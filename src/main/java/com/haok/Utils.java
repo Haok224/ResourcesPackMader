@@ -3,6 +3,7 @@ package com.haok;
 import javax.swing.*;
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,9 +48,26 @@ public class Utils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        //get java information
+        ProcessBuilder b = new ProcessBuilder("java","--version");
+        Process p = null;
+        try {
+            p = b.start();
+        } catch (IOException e) {
+            System.exit(1);
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder buf = new StringBuilder();
+        try {
+            buf.append(reader.readLine()).append("\n");
+            buf.append(reader.readLine()).append("\n");
+            buf.append(reader.readLine()).append("\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try {
             BufferedWriter logWriter = new BufferedWriter(new FileWriter(log,true));
-            logWriter.write(String.format("Date:%s%nCause:%n%s%nMassage:%n%s%nStackTrace:%n%s%n",date_,cause,message_,message));
+            logWriter.write(String.format("Date:%s%nJava Version:%n%s%nCause:%n%s%nMassage:%n%s%nStackTrace:%n%s%n",date_, buf,cause,message_,message));
             logWriter.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

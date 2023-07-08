@@ -5,6 +5,7 @@ build/
 !**/src/test/**/build/
 build.gradle
 gradlew
+*.log
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
