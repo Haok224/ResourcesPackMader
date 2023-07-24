@@ -10,6 +10,7 @@ public class PackConfig {
     final HashMap<ConfigDataType, String> configData = new HashMap<>();
     final HashMap<SaveConfigDataType, String> saveConfigData = new HashMap<>();
     final HashMap<CustomLoadingBackgroundDataType, String> customLoadingBackgroundData = new HashMap<>();
+    final HashMap<SkinDataType,String> skinData = new HashMap<>();
 
     public void put(FontDataType key, String value) {
         fontData.put(key, value);
@@ -33,6 +34,10 @@ public class PackConfig {
 
     public void put(CustomLoadingBackgroundDataType key, String value) {
         customLoadingBackgroundData.put(key, value);
+        System.out.println("Key is:" + key + "\nValue is:" + value);
+    }
+    public void put(SkinDataType key, String value) {
+        skinData.put(key, value);
         System.out.println("Key is:" + key + "\nValue is:" + value);
     }
 

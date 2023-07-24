@@ -3,10 +3,7 @@ package com.haok;
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
 import com.haok.pack.PackMaker;
-import com.haok.pack.data.type.ConfigDataType;
-import com.haok.pack.data.type.FontDataType;
-import com.haok.pack.data.type.PanoramaDataType;
-import com.haok.pack.data.type.SaveConfigDataType;
+import com.haok.pack.data.type.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -18,6 +15,7 @@ import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.event.ItemEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -35,7 +33,7 @@ import static com.haok.FileFilters.PNG_FILE_FILTER;
 import static com.haok.FileFilters.TTF_FILE_FILTER;
 
 public class Main {
-    public static final PackConfig CONFIG = new PackConfig();
+    public static final PackConfig config = new PackConfig();
     public static final Properties PROPERTIES = new Properties();
     public static JFrame frame;
     public static TextFiledWithDescribe describe;
@@ -49,12 +47,7 @@ public class Main {
 
     static {
         try {
-            PROPERTIES.load(
-                    new BufferedReader(new InputStreamReader(
-                            Objects.requireNonNull(
-                                    Main.class.getResourceAsStream("/com/haok/maker.properties")),
-                            StandardCharsets.UTF_8)
-                    ));
+            PROPERTIES.load(new BufferedReader(new InputStreamReader(Objects.requireNonNull(Main.class.getResourceAsStream("/com/haok/maker.properties")), StandardCharsets.UTF_8)));
         } catch (IOException e) {
             Utils.exceptionHandle(e);
         }
@@ -98,7 +91,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -107,7 +100,7 @@ public class Main {
                 @Override
                 public void removeUpdate(DocumentEvent e) {
                     try {
-                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -126,7 +119,7 @@ public class Main {
                 @Override
                 public void insertUpdate(DocumentEvent e) {
                     try {
-                        CONFIG.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
+                        config.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -135,7 +128,7 @@ public class Main {
                 @Override
                 public void removeUpdate(DocumentEvent e) {
                     try {
-                        CONFIG.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
                     } catch (BadLocationException ex) {
                         Utils.exceptionHandle(ex);
                     }
@@ -157,7 +150,7 @@ public class Main {
             version.addItem(v);
             System.out.println(v);
         }
-        CONFIG.put(ConfigDataType.VERSION, String.valueOf(4));
+        config.put(ConfigDataType.VERSION, String.valueOf(4));
         //set version data config when user choose a version number
         version.addItemListener(e -> {
             int index = versionList.indexOf(String.valueOf(e.getItem()));
@@ -167,7 +160,7 @@ public class Main {
             } else {
                 versionNumber = index + 5;
             }
-            CONFIG.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
+            config.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
         });
         //combobox panel
         JPanel comboPanel = new JPanel(new BorderLayout());
@@ -193,7 +186,7 @@ public class Main {
                 iconView.setImage(iconView.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 iconLabel.setIcon(iconView);
                 //set image config when user choose an icon image
-                CONFIG.put(ConfigDataType.ICON, f.getAbsolutePath());
+                config.put(ConfigDataType.ICON, f.getAbsolutePath());
             } else {
                 icon.doRemove();
                 JOptionPane.showMessageDialog(frame, "图片必须为正方形", "", JOptionPane.INFORMATION_MESSAGE);
@@ -251,15 +244,15 @@ public class Main {
             String fontName = f.getFamily();
             fontName = fontName.toLowerCase();
             fontName = fontName.replace(' ', '_');
-            CONFIG.put(FontDataType.FILE_PATH, file.getAbsolutePath());
-            CONFIG.put(FontDataType.NAME, fontName);
+            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+            config.put(FontDataType.NAME, fontName);
         });
         font.setRemoveFileListener(() -> {
             if (microsoftYaheiFont != null) {
                 fontView.setFont(microsoftYaheiFont.deriveFont(20f));
             }
-            CONFIG.put(FontDataType.NAME, null);
-            CONFIG.put(FontDataType.FILE_PATH, null);
+            config.put(FontDataType.NAME, null);
+            config.put(FontDataType.FILE_PATH, null);
         });
         chooseSystemFont.addItemListener(e -> {
             font.setVisible(!font.isVisible());
@@ -273,8 +266,8 @@ public class Main {
             // choose system font preview
             int index;
             if (e.getItem().equals(fonts.getItemAt(0))) {
-                CONFIG.put(FontDataType.FILE_PATH, null);
-                CONFIG.put(FontDataType.NAME, null);
+                config.put(FontDataType.FILE_PATH, null);
+                config.put(FontDataType.NAME, null);
                 return;
             } else {
                 index = fontsNameList.indexOf(String.valueOf(e.getItem()));
@@ -284,7 +277,7 @@ public class Main {
             f = f.deriveFont(20.0f);
             fontView.setFont(f);
             File file = fontFiles.get(index);
-            CONFIG.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
             //Replace BLANK to _
             String fontName = f.getFamily().toLowerCase(Locale.CHINA).replace(' ', '_');
             String regEx = "[^a-zA-Z]";
@@ -292,9 +285,9 @@ public class Main {
             Matcher m = p.matcher(fontName);
             boolean notAllLetter = m.find();
             if (notAllLetter) {
-                CONFIG.put(FontDataType.NAME, "font");
+                config.put(FontDataType.NAME, "font");
             } else {
-                CONFIG.put(FontDataType.NAME, fontName);
+                config.put(FontDataType.NAME, fontName);
             }
         });
         chooseFontFile.doClick();
@@ -310,6 +303,35 @@ public class Main {
         fontPanel.add(fontChoosePanel);
         pane.addTab("字体", fontPanel);
         System.out.println("Finish Font UI set.");
+
+        //--------SKIN--------//
+        JPanel skinPanel = new JPanel();
+        TextFiledWithDescribe steve = new TextFiledWithDescribe("Steve", true, false);
+        TextFiledWithDescribe alex = new TextFiledWithDescribe("Alex", true, false);
+        steve.setChooserFilter(PNG_FILE_FILTER);
+        steve.setSelectFileListener(f -> {
+            BufferedImage image = ImageIO.read(f);
+            if (image.getHeight() != 64 || image.getWidth() != 64) {
+                steve.doRemove();
+                JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            config.put(SkinDataType.STEVE, f.getAbsolutePath());
+        });
+        alex.setChooserFilter(PNG_FILE_FILTER);
+        alex.setSelectFileListener(f -> {
+            BufferedImage image = ImageIO.read(f);
+            if (image.getHeight() != 64 || image.getWidth() != 64) {
+                alex.doRemove();
+                JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            config.put(SkinDataType.ALEX, f.getAbsolutePath());
+        });
+        skinPanel.add(steve);
+        skinPanel.add(alex);
+        pane.addTab("皮肤", skinPanel);
+
         //--------PANORAMA--------//
 
         TextFiledWithDescribe pan0 = new TextFiledWithDescribe("Panorama 0    /tp @p ~ ~ ~ 0 0", true, false);
@@ -318,7 +340,7 @@ public class Main {
         pan0.setChooserFilter(PNG_FILE_FILTER);
         pan0.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_0, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_0, file.getAbsolutePath());
         });
 
         TextFiledWithDescribe pan2 = new TextFiledWithDescribe("Panorama 2    /tp @p ~ ~ ~ 180 0", true, false);
@@ -327,7 +349,7 @@ public class Main {
         pan2.setChooserFilter(PNG_FILE_FILTER);
         pan2.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_1, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_1, file.getAbsolutePath());
         });
 
         TextFiledWithDescribe pan3 = new TextFiledWithDescribe("Panorama 3    /tp @p ~ ~ ~ -90 0", true, false);
@@ -336,7 +358,7 @@ public class Main {
         pan3.getDescribe().setToolTipText("点击复制指令");
         pan3.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_2, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_2, file.getAbsolutePath());
         });
 
         TextFiledWithDescribe pan1 = new TextFiledWithDescribe("Panorama 1    /tp @p ~ ~ ~ 90 0", true, false);
@@ -345,7 +367,7 @@ public class Main {
         pan1.getDescribe().setToolTipText("点击复制指令");
         pan1.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_3, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_3, file.getAbsolutePath());
         });
 
         TextFiledWithDescribe pan4 = new TextFiledWithDescribe("Panorama 4    /tp @p ~ ~ ~ 0 -90", true, false);
@@ -354,7 +376,7 @@ public class Main {
         pan4.getDescribe().setToolTipText("点击复制指令");
         pan4.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_4, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_4, file.getAbsolutePath());
         });
 
         TextFiledWithDescribe pan5 = new TextFiledWithDescribe("Panorama 5    /tp @p ~ ~ ~ 0 90", true, false);
@@ -363,7 +385,7 @@ public class Main {
         pan5.getDescribe().setToolTipText("点击复制指令");
         pan5.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.PANORAMA_5, file.getAbsolutePath());
+            config.put(PanoramaDataType.PANORAMA_5, file.getAbsolutePath());
         });
 
         //picture over background
@@ -372,9 +394,9 @@ public class Main {
         pictureOver.setChooserFilter(PNG_FILE_FILTER);
         pictureOver.setSelectFileListener(file -> {
             System.out.println("Read an image:\n" + file.getAbsolutePath());
-            CONFIG.put(PanoramaDataType.OVER, file.getAbsolutePath());
+            config.put(PanoramaDataType.OVER, file.getAbsolutePath());
         });
-        CONFIG.put(PanoramaDataType.VAGUE,"0");
+        config.put(PanoramaDataType.VAGUE, "0");
         JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL, 0, 1, 0, 65);
         JLabel vagueValue = new JLabel("0");
         GridLayout layout = new GridLayout(10, 1, 0, 10);
@@ -390,7 +412,7 @@ public class Main {
         mainMenuBackgroundPanel.add(vagueValue);
         mainMenuBackgroundPanel.add(vague);
         vague.addAdjustmentListener(e -> {
-            CONFIG.put(PanoramaDataType.VAGUE,String.valueOf(e.getValue()));
+            config.put(PanoramaDataType.VAGUE, String.valueOf(e.getValue()));
             vagueValue.setText(String.valueOf(e.getValue()));
         });
         ScrollPane mainMenuScroll = new ScrollPane();
@@ -401,31 +423,36 @@ public class Main {
         //--------Custom Loading Background--------//
 
         JPanel loading = new JPanel();
-        TextFiledWithDescribe overworld = new TextFiledWithDescribe("主世界",true,false);
-        TextFiledWithDescribe nether = new TextFiledWithDescribe("下界",true,false);
-        TextFiledWithDescribe end = new TextFiledWithDescribe("末地",true,false);
+        TextFiledWithDescribe overworld = new TextFiledWithDescribe("主世界", true, false);
+        overworld.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.OVERWORLD,f.getAbsolutePath()));
+        TextFiledWithDescribe nether = new TextFiledWithDescribe("下界", true, false);
+        nether.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.NETHER,f.getAbsolutePath()));
+        TextFiledWithDescribe end = new TextFiledWithDescribe("末地", true, false);
+        end.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.END,f.getAbsolutePath()));
         JCheckBox isGrid = new JCheckBox("网格");
+        isGrid.addItemListener(i -> config.put(CustomLoadingBackgroundDataType.IS_GIRD, String.valueOf((i.getStateChange() == ItemEvent.SELECTED))));
+        isGrid.setPreferredSize(new Dimension(300, 25));
         loading.add(overworld);
         loading.add(nether);
         loading.add(end);
         loading.add(isGrid);
-        pane.addTab("自定义加载界面",loading);
+        pane.addTab("自定义加载界面", loading);
 
         //--------MAKE--------//
 
         JPanel savePanel = new JPanel();
         TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
         packPath.isShowSaveDialog(true);
-        packPath.setSelectFileListener(file -> CONFIG.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
+        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
         JCheckBox isZip = new JCheckBox("制作为Zip压缩文件");
         isZip.setPreferredSize(new Dimension(300, 25));
-        isZip.addActionListener(e -> CONFIG.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
+        isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
         JButton save = new JButton("保存");
         save.setPreferredSize(new Dimension(300, 25));
         save.addActionListener(e -> {
             Thread t = new Thread(() -> {
                 try {
-                    PackMaker.make(CONFIG);
+                    PackMaker.make(config);
                 } catch (Exception ex) {
                     Utils.exceptionHandle(ex);
                 }

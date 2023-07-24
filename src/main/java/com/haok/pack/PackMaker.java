@@ -2,10 +2,7 @@ package com.haok.pack;
 
 import com.haok.Main;
 import com.haok.Utils;
-import com.haok.pack.data.type.ConfigDataType;
-import com.haok.pack.data.type.FontDataType;
-import com.haok.pack.data.type.PanoramaDataType;
-import com.haok.pack.data.type.SaveConfigDataType;
+import com.haok.pack.data.type.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -71,8 +68,8 @@ public class PackMaker {
                     """, config.get(FontDataType.NAME)));
         }
         //pack icon image
-        if (config.get(ConfigDataType.ICON) != null){
-            Utils.copy(new File(config.get(ConfigDataType.ICON)),new File(packPath,"pack.png"));
+        if (config.get(ConfigDataType.ICON) != null) {
+            Utils.copy(new File(config.get(ConfigDataType.ICON)), new File(packPath, "pack.png"));
         }
         //panorama
         {
@@ -84,7 +81,7 @@ public class PackMaker {
             String pan5 = config.get(PanoramaDataType.PANORAMA_5);
             String over = config.get(PanoramaDataType.OVER);
             File background = new File(minecraft, "/textures/gui/title/background");
-            System.out.println("Make dir:assets/minecraft/textures/gui/title/background" + background.mkdirs());
+            System.out.println("Make dir:assets/minecraft/textures/gui/title/background:" + background.mkdirs());
             if (pan0 != null) {
                 File panorama_0 = new File(background, "panorama_0.png");
                 Utils.copy(new File(pan0), panorama_0);
@@ -110,17 +107,43 @@ public class PackMaker {
                 Utils.copy(new File(pan3), panorama_3);
             }
             if (over != null) {
-                File over_ = new File(background,"panorama_overlay.png");
-                Utils.copy(new File(over),over_);
+                File over_ = new File(background, "panorama_overlay.png");
+                Utils.copy(new File(over), over_);
             }
         }
-        File panoramaProperties = new File(minecraft,"assets/minecraft/optifine/gui/background.properties");
+        File panoramaProperties = new File(minecraft, "assets/minecraft/optifine/gui/background.properties");
         String vague = config.get(PanoramaDataType.VAGUE);
-        if (!"0".equals(vague)){
-            System.out.println("Make Panorama Properties Dir:"+new File(panoramaProperties.getParent()).mkdirs());
-            System.out.println("Make Properties File:"+panoramaProperties.createNewFile());
-            Utils.write(panoramaProperties, String.format("blur1=%s",vague));
+        if (!"0".equals(vague)) {
+            System.out.println("Make Panorama Properties Dir:" + new File(panoramaProperties.getParent()).mkdirs());
+            System.out.println("Make Properties File:" + panoramaProperties.createNewFile());
+            Utils.write(panoramaProperties, String.format("blur1=%s", vague));
         }
-        JOptionPane.showMessageDialog(Main.frame,"制作完成!",Main.PROPERTIES.get("title").toString(),JOptionPane.INFORMATION_MESSAGE);
+        //Make custom loading background
+        if (!config.customLoadingBackgroundData.isEmpty()) {
+            File loadingFilePath = new File(minecraft, "/optifine/gui/loading/");
+            File loadingProperties = new File(loadingFilePath, "loading.properties");
+            System.out.printf("Make loading.properties:%s%n", loadingFilePath.mkdirs() && loadingProperties.createNewFile());
+            File picOver = new File(loadingFilePath, "background0.png");
+            File picNether = new File(loadingFilePath, "background-1.png");
+            File picEnd = new File(loadingFilePath, "background1.png");
+            if (config.get(CustomLoadingBackgroundDataType.OVERWORLD) != null) {
+                Utils.copy(new File(config.get(CustomLoadingBackgroundDataType.OVERWORLD)), picOver);
+            }
+            if (config.get(CustomLoadingBackgroundDataType.END) != null) {
+                Utils.copy(new File(config.get(CustomLoadingBackgroundDataType.END)), picEnd);
+            }
+            if (config.get(CustomLoadingBackgroundDataType.NETHER) != null) {
+                Utils.copy(new File(config.get(CustomLoadingBackgroundDataType.NETHER)), picNether);
+            }
+            boolean isGird = Boolean.parseBoolean(config.get(CustomLoadingBackgroundDataType.IS_GIRD));
+            if (!isGird) {
+                //TODO
+                System.out.println("TODO!");
+                Utils.write(loadingProperties, """
+                        scaleMode=stretch
+                        """);
+            }
+        }
+        JOptionPane.showMessageDialog(Main.frame, "制作完成!", Main.PROPERTIES.get("title").toString(), JOptionPane.INFORMATION_MESSAGE);
     }
 }
