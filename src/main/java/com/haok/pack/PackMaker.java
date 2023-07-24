@@ -137,8 +137,6 @@ public class PackMaker {
             }
             boolean isGird = Boolean.parseBoolean(config.get(CustomLoadingBackgroundDataType.IS_GIRD));
             if (!isGird) {
-                //TODO
-                System.out.println("TODO!");
                 Utils.write(loadingProperties, """
                         scaleMode=stretch
                         """);
