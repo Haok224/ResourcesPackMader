@@ -59,4 +59,8 @@ public class PackConfig {
     public String get(CustomLoadingBackgroundDataType key) {
         return customLoadingBackgroundData.get(key);
     }
+
+    public String get(SkinDataType skinDataType) {
+        return skinData.get(skinDataType);
+    }
 }

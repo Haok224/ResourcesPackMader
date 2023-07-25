@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="928c68cf-5ad4-46f0-81d7-ac7fb02c5b57" name="Changes" comment="fix">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/SkinDataType.java" afterDir="false" />
+    <list default="true" id="928c68cf-5ad4-46f0-81d7-ac7fb02c5b57" name="Changes" comment="complete loading make">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/PackMaker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/CustomLoadingBackgroundDataType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/haok/pack/data/type/CustomLoadingBackgroundDataType.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,21 +128,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Linghao/Projects/pack-maker&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "TODO_SCOPE": "所有位置",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/Linghao/Projects/pack-maker",
+    "project.structure.last.edited": "模块",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.haok.pack" />
@@ -280,7 +277,23 @@
       <option name="project" value="LOCAL" />
       <updated>1687396168470</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="complete loading make">
+      <option name="closed" value="true" />
+      <created>1690163093177</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1690163093177</updated>
+    </task>
+    <task id="LOCAL-00008" summary="complete loading make">
+      <option name="closed" value="true" />
+      <created>1690163139018</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1690163139018</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -302,7 +315,8 @@
     <MESSAGE value="font make" />
     <MESSAGE value="add mian menu picture vague" />
     <MESSAGE value="fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix" />
+    <MESSAGE value="complete loading make" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete loading make" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
