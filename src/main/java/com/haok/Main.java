@@ -1,5 +1,6 @@
 package com.haok;
 
+import com.formdev.flatlaf.FlatDarculaLaf;
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
 import com.haok.pack.PackMaker;
@@ -55,13 +56,8 @@ public class Main {
 
     public static void main(String[] args) {
         //--------Window--------//
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
-            System.err.println("Failed to load Look & Feel.");
-            Utils.exceptionHandle(e);
-        }
         //Create Frame
+        FlatDarculaLaf.setup();
         frame = new JFrame(PROPERTIES.get("title").toString());
         frame.setIconImage(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/com/haok/logo.png"))).getImage());
         //Main Frame

@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class PackMaker {
     public static void make(PackConfig config) throws IOException {
-        //if pack name is null -> show message dialog and focus on pack name text field
+        //if pack name is null : show message dialog and focus on pack name text field
         if (config.get(ConfigDataType.PACK_NAME) == null) {
             JOptionPane.showMessageDialog(Main.frame, "资源包名不能为空", Main.PROPERTIES.get("title").toString(), JOptionPane.INFORMATION_MESSAGE);
             Main.pane.setSelectedIndex(0);
