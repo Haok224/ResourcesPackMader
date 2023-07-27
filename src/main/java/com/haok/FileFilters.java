@@ -5,7 +5,6 @@ import java.io.File;
 
 /**
  * @author Haok224
- *
  */
 public interface FileFilters {
 

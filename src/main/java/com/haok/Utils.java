@@ -36,7 +36,7 @@ public class Utils {
         PrintWriter pWriter = new PrintWriter(causeWriter);
         if (t.getCause() != null) {
             t.getCause().printStackTrace(pWriter);
-        }else {
+        } else {
             pWriter.write("Null");
         }
         String cause = causeWriter.toString();
@@ -49,7 +49,7 @@ public class Utils {
             throw new RuntimeException(e);
         }
         //get java information
-        ProcessBuilder b = new ProcessBuilder("java","--version");
+        ProcessBuilder b = new ProcessBuilder("java", "--version");
         Process p = null;
         try {
             p = b.start();
@@ -66,8 +66,8 @@ public class Utils {
             throw new RuntimeException(e);
         }
         try {
-            BufferedWriter logWriter = new BufferedWriter(new FileWriter(log,true));
-            logWriter.write(String.format("Date:%s%nJava Version:%n%s%nCause:%n%s%nMassage:%n%s%nStackTrace:%n%s%n",date_, buf,cause,message_,message));
+            BufferedWriter logWriter = new BufferedWriter(new FileWriter(log, true));
+            logWriter.write(String.format("Date:%s%nJava Version:%n%s%nCause:%n%s%nMassage:%n%s%nStackTrace:%n%s%n", date_, buf, cause, message_, message));
             logWriter.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);

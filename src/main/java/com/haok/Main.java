@@ -1,6 +1,6 @@
 package com.haok;
 
-import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatLightLaf;
 import com.haok.components.TextFiledWithDescribe;
 import com.haok.pack.PackConfig;
 import com.haok.pack.PackMaker;
@@ -55,415 +55,417 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        //--------Window--------//
-        //Create Frame
-        FlatDarculaLaf.setup();
-        frame = new JFrame(PROPERTIES.get("title").toString());
-        frame.setIconImage(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/com/haok/logo.png"))).getImage());
-        //Main Frame
-        pane = new JTabbedPane();
-        frame.setContentPane(pane);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(Integer.parseInt(PROPERTIES.get("width").toString()), Integer.parseInt(PROPERTIES.get("height").toString()));
-        frame.setLocationRelativeTo(null);  //Windows Center
-        frame.setResizable(false);  //Frame Not Resizeable
-        String[] fontsName = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
-        //Set font
-        for (String s : fontsName) {
-            if ("微软雅黑".equals(s)) {
-                microsoftYaheiFont = new Font("微软雅黑", Font.PLAIN, 13);
-                initGlobalFont(microsoftYaheiFont);
+        SwingUtilities.invokeLater(() -> {
+            //--------Window--------//
+            //Create Frame
+            FlatLightLaf.setup();
+            frame = new JFrame(PROPERTIES.get("title").toString());
+            frame.setIconImage(new ImageIcon(Objects.requireNonNull(Main.class.getResource("/com/haok/logo.png"))).getImage());
+            //Main Frame
+            pane = new JTabbedPane();
+            frame.setContentPane(pane);
+            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            frame.setSize(Integer.parseInt(PROPERTIES.get("width").toString()), Integer.parseInt(PROPERTIES.get("height").toString()));
+            frame.setLocationRelativeTo(null);  //Windows Center
+            frame.setResizable(false);  //Frame Not Resizeable
+            String[] fontsName = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
+            //Set font
+            for (String s : fontsName) {
+                if ("微软雅黑".equals(s)) {
+                    microsoftYaheiFont = new Font("微软雅黑", Font.PLAIN, 13);
+                    initGlobalFont(microsoftYaheiFont);
+                }
             }
-        }
-        System.out.println("Finish frame create.");
-        //--------PACK CONFIG--------//
-        //Set Panel Contents
-        JPanel settingPane = new JPanel();
-        packName = new TextFiledWithDescribe("资源包名", false, true);
-        {
-            Document document = packName.getTextField().getDocument();
-            //set pack name config when user type in content for pack-name text filed
-            document.addDocumentListener(new DocumentListener() {
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
-                    } catch (BadLocationException ex) {
-                        Utils.exceptionHandle(ex);
+            System.out.println("Finish frame create.");
+            //--------PACK CONFIG--------//
+            //Set Panel Contents
+            JPanel settingPane = new JPanel();
+            packName = new TextFiledWithDescribe("资源包名", false, true);
+            {
+                Document document = packName.getTextField().getDocument();
+                //set pack name config when user type in content for pack-name text filed
+                document.addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        try {
+                            config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        } catch (BadLocationException ex) {
+                            Utils.exceptionHandle(ex);
+                        }
                     }
-                }
 
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
-                    } catch (BadLocationException ex) {
-                        Utils.exceptionHandle(ex);
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        try {
+                            config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        } catch (BadLocationException ex) {
+                            Utils.exceptionHandle(ex);
+                        }
                     }
-                }
 
-                @Override
-                public void changedUpdate(DocumentEvent e) {
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                    }
+                });
+            }
+            describe = new TextFiledWithDescribe("描述", false, true);
+            {
+                Document document = describe.getTextField().getDocument();
+                //set pack name config when user type in content for pack-name text filed
+                document.addDocumentListener(new DocumentListener() {
+                    @Override
+                    public void insertUpdate(DocumentEvent e) {
+                        try {
+                            config.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
+                        } catch (BadLocationException ex) {
+                            Utils.exceptionHandle(ex);
+                        }
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e) {
+                        try {
+                            config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
+                        } catch (BadLocationException ex) {
+                            Utils.exceptionHandle(ex);
+                        }
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e) {
+                    }
+                });
+            }
+
+            version = new JComboBox<>();//create version combobox
+            String[] versions =
+                    //Version
+                    {"1.13 ~ 1.14.4", "1.15 ~ 1.16.1", "1.16.2 ~ 1.16.5", "1.17 ~ 1.17.1", "1.18 ~ 1.18.2", "1.19 ~ 1.19.2", "1.19.3 ~ 22w44a", "1.19.3 ~ 1.19.4(23w07a)", "1.19.4 ~ 23w13a", "1.20(23w14a) ~ 1.20(23w16a)", "1.20"};
+            List<String> versionList = Arrays.asList(versions);
+            for (String v : versionList) {
+                //Add contents for combobox
+                version.addItem(v);
+                System.out.println(v);
+            }
+            config.put(ConfigDataType.VERSION, String.valueOf(4));
+            //set version data config when user choose a version number
+            version.addItemListener(e -> {
+                int index = versionList.indexOf(String.valueOf(e.getItem()));
+                int versionNumber;
+                if (index < 6) {
+                    versionNumber = index + 4;
+                } else {
+                    versionNumber = index + 5;
+                }
+                config.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
+            });
+            //combobox panel
+            JPanel comboPanel = new JPanel(new BorderLayout());
+            comboPanel.setPreferredSize(new Dimension(300, 50));
+            comboPanel.add(new JLabel("版本"), BorderLayout.NORTH);
+            comboPanel.add(version, BorderLayout.CENTER);
+            //icon preview
+            JLabel iconLabel = new JLabel();
+            ImageIcon iconView = new ImageIcon();
+            //icon image text filed
+            icon = new TextFiledWithDescribe("图标", true, false);
+            icon.setChooserFilter(PNG_FILE_FILTER);
+            //set icon image preview label when choose an image
+            icon.setSelectFileListener(f -> {
+                //read image
+                BufferedImage image = ImageIO.read(f);
+                System.out.println("Read an image:" + icon.getText());
+                //determine image is a square
+                if (image.getWidth() == image.getHeight()) {
+                    //set image
+                    System.out.println("Set an image:" + image);
+                    iconView.setImage(image);
+                    iconView.setImage(iconView.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                    iconLabel.setIcon(iconView);
+                    //set image config when user choose an icon image
+                    config.put(ConfigDataType.ICON, f.getAbsolutePath());
+                } else {
+                    icon.doRemove();
+                    JOptionPane.showMessageDialog(frame, "图片必须为正方形", "", JOptionPane.INFORMATION_MESSAGE);
                 }
             });
-        }
-        describe = new TextFiledWithDescribe("描述", false, true);
-        {
-            Document document = describe.getTextField().getDocument();
-            //set pack name config when user type in content for pack-name text filed
-            document.addDocumentListener(new DocumentListener() {
-                @Override
-                public void insertUpdate(DocumentEvent e) {
-                    try {
-                        config.put(ConfigDataType.DESCRIBE, e.getDocument().getText(0, e.getDocument().getLength()));
-                    } catch (BadLocationException ex) {
-                        Utils.exceptionHandle(ex);
-                    }
-                }
-
-                @Override
-                public void removeUpdate(DocumentEvent e) {
-                    try {
-                        config.put(ConfigDataType.PACK_NAME, e.getDocument().getText(0, e.getDocument().getLength()));
-                    } catch (BadLocationException ex) {
-                        Utils.exceptionHandle(ex);
-                    }
-                }
-
-                @Override
-                public void changedUpdate(DocumentEvent e) {
-                }
-            });
-        }
-
-        version = new JComboBox<>();//create version combobox
-        String[] versions =
-                //Version
-                {"1.13 ~ 1.14.4", "1.15 ~ 1.16.1", "1.16.2 ~ 1.16.5", "1.17 ~ 1.17.1", "1.18 ~ 1.18.2", "1.19 ~ 1.19.2", "1.19.3 ~ 22w44a", "1.19.3 ~ 1.19.4(23w07a)", "1.19.4 ~ 23w13a", "1.20(23w14a) ~ 1.20(23w16a)", "1.20"};
-        List<String> versionList = Arrays.asList(versions);
-        for (String v : versionList) {
-            //Add contents for combobox
-            version.addItem(v);
-            System.out.println(v);
-        }
-        config.put(ConfigDataType.VERSION, String.valueOf(4));
-        //set version data config when user choose a version number
-        version.addItemListener(e -> {
-            int index = versionList.indexOf(String.valueOf(e.getItem()));
-            int versionNumber;
-            if (index < 6) {
-                versionNumber = index + 4;
-            } else {
-                versionNumber = index + 5;
-            }
-            config.put(ConfigDataType.VERSION, String.valueOf(versionNumber));
-        });
-        //combobox panel
-        JPanel comboPanel = new JPanel(new BorderLayout());
-        comboPanel.setPreferredSize(new Dimension(300, 50));
-        comboPanel.add(new JLabel("版本"), BorderLayout.NORTH);
-        comboPanel.add(version, BorderLayout.CENTER);
-        //icon preview
-        JLabel iconLabel = new JLabel();
-        ImageIcon iconView = new ImageIcon();
-        //icon image text filed
-        icon = new TextFiledWithDescribe("图标", true, false);
-        icon.setChooserFilter(PNG_FILE_FILTER);
-        //set icon image preview label when choose an image
-        icon.setSelectFileListener(f -> {
-            //read image
-            BufferedImage image = ImageIO.read(f);
-            System.out.println("Read an image:" + icon.getText());
-            //determine image is a square
-            if (image.getWidth() == image.getHeight()) {
-                //set image
-                System.out.println("Set an image:" + image);
-                iconView.setImage(image);
-                iconView.setImage(iconView.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
-                iconLabel.setIcon(iconView);
-                //set image config when user choose an icon image
-                config.put(ConfigDataType.ICON, f.getAbsolutePath());
-            } else {
-                icon.doRemove();
-                JOptionPane.showMessageDialog(frame, "图片必须为正方形", "", JOptionPane.INFORMATION_MESSAGE);
-            }
-        });
-        icon.setPreferredSize(new Dimension(300, 100));
-        iconLabel.setPreferredSize(new Dimension(50, 50));
-        icon.add(iconLabel, BorderLayout.SOUTH);
-        icon.setRemoveFileListener(() -> iconLabel.setIcon(null));
-        //add contents for config panel
-        settingPane.add(packName);
-        settingPane.add(describe);
-        settingPane.add(comboPanel);
-        settingPane.add(icon);
-        pane.addTab("资源包选项", settingPane);
-        System.out.println("Finish Config UI set.");
-        //--------FONT--------//
-        JPanel fontPanel = new JPanel();
-        JRadioButton chooseFontFile = new JRadioButton("选择字体文件");
-        JRadioButton chooseSystemFont = new JRadioButton("选择系统字体");
-        ButtonGroup group = new ButtonGroup();
-        group.add(chooseFontFile);
-        group.add(chooseSystemFont);
-        //font choose text filed
-        font = new TextFiledWithDescribe("字体", true, false);
-        font.setChooserFilter(TTF_FILE_FILTER);
-        fontView = new JTextField("A quickly brown fox jumps over a lazy dog.");
-        JScrollPane fontViewPane = new JScrollPane(fontView);
-        JLabel fontViewLabel = new JLabel("预览:");
-        JComboBox<String> fonts = new JComboBox<>();
-        fonts.addItem("请选择");
-        //font files list
-        List<File> fontFiles = Utils.getSystemFonts();
-        //font objects list
-        List<Font> fontList = new ArrayList<>();
-        fontFiles.forEach(file -> {
-            try {
-                fontList.add(Font.createFont(Font.TRUETYPE_FONT, file));
-            } catch (FontFormatException | IOException e) {
-                Utils.exceptionHandle(e);
-            }
-        });
-        //font names list
-        List<String> fontsNameList = new ArrayList<>();
-        fontList.forEach(font1 -> fontsNameList.add(font1.getName()));
-        fontsNameList.forEach(fonts::addItem);
-        fontView.setFont(microsoftYaheiFont != null ? microsoftYaheiFont.deriveFont(20f) : new Font("Arial", Font.PLAIN, 20));
-        font.setSelectFileListener(file -> {
-            //font preview
-            Font f = Font.createFont(Font.TRUETYPE_FONT, file);
-            System.out.println("Read a font:" + f.getName());
-            f = f.deriveFont(20.0f);
-            fontView.setFont(f);
-            //add font pack-config
-            String fontName = f.getFamily();
-            fontName = fontName.toLowerCase();
-            fontName = fontName.replace(' ', '_');
-            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
-            config.put(FontDataType.NAME, fontName);
-        });
-        font.setRemoveFileListener(() -> {
-            if (microsoftYaheiFont != null) {
-                fontView.setFont(microsoftYaheiFont.deriveFont(20f));
-            }
-            config.put(FontDataType.NAME, null);
-            config.put(FontDataType.FILE_PATH, null);
-        });
-        chooseSystemFont.addItemListener(e -> {
-            font.setVisible(!font.isVisible());
-            fonts.setVisible(true);
-        });
-        chooseFontFile.addItemListener(e -> {
-            fonts.setVisible(!fonts.isVisible());
-            font.setVisible(true);
-        });
-        fonts.addItemListener(e -> {
-            // choose system font preview
-            int index;
-            if (e.getItem().equals(fonts.getItemAt(0))) {
-                config.put(FontDataType.FILE_PATH, null);
-                config.put(FontDataType.NAME, null);
-                return;
-            } else {
-                index = fontsNameList.indexOf(String.valueOf(e.getItem()));
-            }
-            Font f = fontList.get(index).deriveFont(20f);
-            System.out.println("Read a font:" + f.getName());
-            f = f.deriveFont(20.0f);
-            fontView.setFont(f);
-            File file = fontFiles.get(index);
-            config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
-            //Replace BLANK to _
-            String fontName = f.getFamily().toLowerCase(Locale.CHINA).replace(' ', '_');
-            String regEx = "[^a-zA-Z]";
-            Pattern p = Pattern.compile(regEx);
-            Matcher m = p.matcher(fontName);
-            boolean notAllLetter = m.find();
-            if (notAllLetter) {
-                config.put(FontDataType.NAME, "font");
-            } else {
-                config.put(FontDataType.NAME, fontName);
-            }
-        });
-        chooseFontFile.doClick();
-
-        JPanel fontChoosePanel = new JPanel(new GridLayout(6, 1));
-        fontChoosePanel.add(chooseFontFile);
-        fontChoosePanel.add(font);
-        fontChoosePanel.add(chooseSystemFont);
-        fontChoosePanel.add(fonts);
-
-        fontChoosePanel.add(fontViewLabel);
-        fontChoosePanel.add(fontViewPane);
-        fontPanel.add(fontChoosePanel);
-        pane.addTab("字体", fontPanel);
-        System.out.println("Finish Font UI set.");
-
-        //--------SKIN--------//
-        JPanel skinPanel = new JPanel();
-        TextFiledWithDescribe steve = new TextFiledWithDescribe("Steve", true, false);
-        TextFiledWithDescribe alex = new TextFiledWithDescribe("Alex", true, false);
-        steve.setChooserFilter(PNG_FILE_FILTER);
-        steve.setSelectFileListener(f -> {
-            BufferedImage image = ImageIO.read(f);
-            if (image.getHeight() != 64 || image.getWidth() != 64) {
-                steve.doRemove();
-                JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            config.put(SkinDataType.STEVE, f.getAbsolutePath());
-        });
-        alex.setChooserFilter(PNG_FILE_FILTER);
-        alex.setSelectFileListener(f -> {
-            BufferedImage image = ImageIO.read(f);
-            if (image.getHeight() != 64 || image.getWidth() != 64) {
-                alex.doRemove();
-                JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
-                return;
-            }
-            config.put(SkinDataType.ALEX, f.getAbsolutePath());
-        });
-        skinPanel.add(steve);
-        skinPanel.add(alex);
-        pane.addTab("皮肤", skinPanel);
-
-        //--------PANORAMA--------//
-
-        TextFiledWithDescribe pan0 = new TextFiledWithDescribe("Panorama 0    /tp @p ~ ~ ~ 0 0", true, false);
-        pan0.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
-        pan0.getDescribe().setToolTipText("点击复制指令");
-        pan0.setChooserFilter(PNG_FILE_FILTER);
-        pan0.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_0, file.getAbsolutePath());
-        });
-
-        TextFiledWithDescribe pan2 = new TextFiledWithDescribe("Panorama 2    /tp @p ~ ~ ~ 180 0", true, false);
-        pan2.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 180 0"));
-        pan2.getDescribe().setToolTipText("点击复制指令");
-        pan2.setChooserFilter(PNG_FILE_FILTER);
-        pan2.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_1, file.getAbsolutePath());
-        });
-
-        TextFiledWithDescribe pan3 = new TextFiledWithDescribe("Panorama 3    /tp @p ~ ~ ~ -90 0", true, false);
-        pan3.setChooserFilter(PNG_FILE_FILTER);
-        pan3.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 0"));
-        pan3.getDescribe().setToolTipText("点击复制指令");
-        pan3.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_2, file.getAbsolutePath());
-        });
-
-        TextFiledWithDescribe pan1 = new TextFiledWithDescribe("Panorama 1    /tp @p ~ ~ ~ 90 0", true, false);
-        pan1.setChooserFilter(PNG_FILE_FILTER);
-        pan1.addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 90 0"));
-        pan1.getDescribe().setToolTipText("点击复制指令");
-        pan1.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_3, file.getAbsolutePath());
-        });
-
-        TextFiledWithDescribe pan4 = new TextFiledWithDescribe("Panorama 4    /tp @p ~ ~ ~ 0 -90", true, false);
-        pan4.setChooserFilter(PNG_FILE_FILTER);
-        pan4.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 -90"));
-        pan4.getDescribe().setToolTipText("点击复制指令");
-        pan4.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_4, file.getAbsolutePath());
-        });
-
-        TextFiledWithDescribe pan5 = new TextFiledWithDescribe("Panorama 5    /tp @p ~ ~ ~ 0 90", true, false);
-        pan5.setChooserFilter(PNG_FILE_FILTER);
-        pan5.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 90"));
-        pan5.getDescribe().setToolTipText("点击复制指令");
-        pan5.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.PANORAMA_5, file.getAbsolutePath());
-        });
-
-        //picture over background
-
-        TextFiledWithDescribe pictureOver = new TextFiledWithDescribe("覆盖图片", true, false);
-        pictureOver.setChooserFilter(PNG_FILE_FILTER);
-        pictureOver.setSelectFileListener(file -> {
-            System.out.println("Read an image:\n" + file.getAbsolutePath());
-            config.put(PanoramaDataType.OVER, file.getAbsolutePath());
-        });
-        config.put(PanoramaDataType.VAGUE, "0");
-        JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL, 0, 1, 0, 65);
-        JLabel vagueValue = new JLabel("0");
-        GridLayout layout = new GridLayout(10, 1, 0, 10);
-        JPanel mainMenuBackgroundPanel = new JPanel(layout);
-        mainMenuBackgroundPanel.add(pan0);
-        mainMenuBackgroundPanel.add(pan1);
-        mainMenuBackgroundPanel.add(pan2);
-        mainMenuBackgroundPanel.add(pan3);
-        mainMenuBackgroundPanel.add(pan4);
-        mainMenuBackgroundPanel.add(pan5);
-        mainMenuBackgroundPanel.add(pictureOver);
-        mainMenuBackgroundPanel.add(new JLabel("模糊等级(0~64)  仅Optifine"));
-        mainMenuBackgroundPanel.add(vagueValue);
-        mainMenuBackgroundPanel.add(vague);
-        vague.addAdjustmentListener(e -> {
-            config.put(PanoramaDataType.VAGUE, String.valueOf(e.getValue()));
-            vagueValue.setText(String.valueOf(e.getValue()));
-        });
-        ScrollPane mainMenuScroll = new ScrollPane();
-        mainMenuScroll.add(mainMenuBackgroundPanel);
-        pane.addTab("主菜单全景图", mainMenuScroll);
-        System.out.println("Finish Menu Background Photo UI set.");
-
-        //--------Custom Loading Background--------//
-
-        JPanel loading = new JPanel();
-        TextFiledWithDescribe overworld = new TextFiledWithDescribe("主世界", true, false);
-        overworld.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.OVERWORLD,f.getAbsolutePath()));
-        TextFiledWithDescribe nether = new TextFiledWithDescribe("下界", true, false);
-        nether.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.NETHER,f.getAbsolutePath()));
-        TextFiledWithDescribe end = new TextFiledWithDescribe("末地", true, false);
-        end.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.END,f.getAbsolutePath()));
-        JCheckBox isGrid = new JCheckBox("网格");
-        isGrid.addItemListener(i -> config.put(CustomLoadingBackgroundDataType.IS_GIRD, String.valueOf((i.getStateChange() == ItemEvent.SELECTED))));
-        isGrid.setPreferredSize(new Dimension(300, 25));
-        loading.add(overworld);
-        loading.add(nether);
-        loading.add(end);
-        loading.add(isGrid);
-        pane.addTab("自定义加载界面", loading);
-
-        //--------MAKE--------//
-
-        JPanel savePanel = new JPanel();
-        TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
-        packPath.isShowSaveDialog(true);
-        packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
-        JCheckBox isZip = new JCheckBox("制作为Zip压缩文件");
-        isZip.setPreferredSize(new Dimension(300, 25));
-        isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
-        JButton save = new JButton("保存");
-        save.setPreferredSize(new Dimension(300, 25));
-        save.addActionListener(e -> {
-            Thread t = new Thread(() -> {
+            icon.setPreferredSize(new Dimension(300, 100));
+            iconLabel.setPreferredSize(new Dimension(50, 50));
+            icon.add(iconLabel, BorderLayout.SOUTH);
+            icon.setRemoveFileListener(() -> iconLabel.setIcon(null));
+            //add contents for config panel
+            settingPane.add(packName);
+            settingPane.add(describe);
+            settingPane.add(comboPanel);
+            settingPane.add(icon);
+            pane.addTab("资源包选项", settingPane);
+            System.out.println("Finish Config UI set.");
+            //--------FONT--------//
+            JPanel fontPanel = new JPanel();
+            JRadioButton chooseFontFile = new JRadioButton("选择字体文件");
+            JRadioButton chooseSystemFont = new JRadioButton("选择系统字体");
+            ButtonGroup group = new ButtonGroup();
+            group.add(chooseFontFile);
+            group.add(chooseSystemFont);
+            //font choose text filed
+            font = new TextFiledWithDescribe("字体", true, false);
+            font.setChooserFilter(TTF_FILE_FILTER);
+            fontView = new JTextField("A quickly brown fox jumps over a lazy dog.");
+            JScrollPane fontViewPane = new JScrollPane(fontView);
+            JLabel fontViewLabel = new JLabel("预览:");
+            JComboBox<String> fonts = new JComboBox<>();
+            fonts.addItem("请选择");
+            //font files list
+            List<File> fontFiles = Utils.getSystemFonts();
+            //font objects list
+            List<Font> fontList = new ArrayList<>();
+            fontFiles.forEach(file -> {
                 try {
-                    PackMaker.make(config);
-                } catch (Exception ex) {
-                    Utils.exceptionHandle(ex);
+                    fontList.add(Font.createFont(Font.TRUETYPE_FONT, file));
+                } catch (FontFormatException | IOException e) {
+                    Utils.exceptionHandle(e);
                 }
             });
-            t.setName("make");
-            t.start();
+            //font names list
+            List<String> fontsNameList = new ArrayList<>();
+            fontList.forEach(font1 -> fontsNameList.add(font1.getName()));
+            fontsNameList.forEach(fonts::addItem);
+            fontView.setFont(microsoftYaheiFont != null ? microsoftYaheiFont.deriveFont(20f) : new Font("Arial", Font.PLAIN, 20));
+            font.setSelectFileListener(file -> {
+                //font preview
+                Font f = Font.createFont(Font.TRUETYPE_FONT, file);
+                System.out.println("Read a font:" + f.getName());
+                f = f.deriveFont(20.0f);
+                fontView.setFont(f);
+                //add font pack-config
+                String fontName = f.getFamily();
+                fontName = fontName.toLowerCase();
+                fontName = fontName.replace(' ', '_');
+                config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+                config.put(FontDataType.NAME, fontName);
+            });
+            font.setRemoveFileListener(() -> {
+                if (microsoftYaheiFont != null) {
+                    fontView.setFont(microsoftYaheiFont.deriveFont(20f));
+                }
+                config.put(FontDataType.NAME, null);
+                config.put(FontDataType.FILE_PATH, null);
+            });
+            chooseSystemFont.addItemListener(e -> {
+                font.setVisible(!font.isVisible());
+                fonts.setVisible(true);
+            });
+            chooseFontFile.addItemListener(e -> {
+                fonts.setVisible(!fonts.isVisible());
+                font.setVisible(true);
+            });
+            fonts.addItemListener(e -> {
+                // choose system font preview
+                int index;
+                if (e.getItem().equals(fonts.getItemAt(0))) {
+                    config.put(FontDataType.FILE_PATH, null);
+                    config.put(FontDataType.NAME, null);
+                    return;
+                } else {
+                    index = fontsNameList.indexOf(String.valueOf(e.getItem()));
+                }
+                Font f = fontList.get(index).deriveFont(20f);
+                System.out.println("Read a font:" + f.getName());
+                f = f.deriveFont(20.0f);
+                fontView.setFont(f);
+                File file = fontFiles.get(index);
+                config.put(FontDataType.FILE_PATH, file.getAbsolutePath());
+                //Replace BLANK to _
+                String fontName = f.getFamily().toLowerCase(Locale.CHINA).replace(' ', '_');
+                String regEx = "[^a-zA-Z]";
+                Pattern p = Pattern.compile(regEx);
+                Matcher m = p.matcher(fontName);
+                boolean notAllLetter = m.find();
+                if (notAllLetter) {
+                    config.put(FontDataType.NAME, "font");
+                } else {
+                    config.put(FontDataType.NAME, fontName);
+                }
+            });
+            chooseFontFile.doClick();
+
+            JPanel fontChoosePanel = new JPanel(new GridLayout(6, 1));
+            fontChoosePanel.add(chooseFontFile);
+            fontChoosePanel.add(font);
+            fontChoosePanel.add(chooseSystemFont);
+            fontChoosePanel.add(fonts);
+
+            fontChoosePanel.add(fontViewLabel);
+            fontChoosePanel.add(fontViewPane);
+            fontPanel.add(fontChoosePanel);
+            pane.addTab("字体", fontPanel);
+            System.out.println("Finish Font UI set.");
+
+            //--------SKIN--------//
+            JPanel skinPanel = new JPanel();
+            TextFiledWithDescribe steve = new TextFiledWithDescribe("Steve", true, false);
+            TextFiledWithDescribe alex = new TextFiledWithDescribe("Alex", true, false);
+            steve.setChooserFilter(PNG_FILE_FILTER);
+            steve.setSelectFileListener(f -> {
+                BufferedImage image = ImageIO.read(f);
+                if (image.getHeight() != 64 || image.getWidth() != 64) {
+                    steve.doRemove();
+                    JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                config.put(SkinDataType.STEVE, f.getAbsolutePath());
+            });
+            alex.setChooserFilter(PNG_FILE_FILTER);
+            alex.setSelectFileListener(f -> {
+                BufferedImage image = ImageIO.read(f);
+                if (image.getHeight() != 64 || image.getWidth() != 64) {
+                    alex.doRemove();
+                    JOptionPane.showMessageDialog(frame, "皮肤文件必须为64 x 64 。", PROPERTIES.getProperty("title"), JOptionPane.INFORMATION_MESSAGE);
+                    return;
+                }
+                config.put(SkinDataType.ALEX, f.getAbsolutePath());
+            });
+            skinPanel.add(steve);
+            skinPanel.add(alex);
+            pane.addTab("皮肤", skinPanel);
+
+            //--------PANORAMA--------//
+
+            TextFiledWithDescribe pan0 = new TextFiledWithDescribe("Panorama 0    /tp @p ~ ~ ~ 0 0", true, false);
+            pan0.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 0"));
+            pan0.getDescribe().setToolTipText("点击复制指令");
+            pan0.setChooserFilter(PNG_FILE_FILTER);
+            pan0.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_0, file.getAbsolutePath());
+            });
+
+            TextFiledWithDescribe pan2 = new TextFiledWithDescribe("Panorama 2    /tp @p ~ ~ ~ 180 0", true, false);
+            pan2.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 180 0"));
+            pan2.getDescribe().setToolTipText("点击复制指令");
+            pan2.setChooserFilter(PNG_FILE_FILTER);
+            pan2.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_1, file.getAbsolutePath());
+            });
+
+            TextFiledWithDescribe pan3 = new TextFiledWithDescribe("Panorama 3    /tp @p ~ ~ ~ -90 0", true, false);
+            pan3.setChooserFilter(PNG_FILE_FILTER);
+            pan3.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ -90 0"));
+            pan3.getDescribe().setToolTipText("点击复制指令");
+            pan3.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_2, file.getAbsolutePath());
+            });
+
+            TextFiledWithDescribe pan1 = new TextFiledWithDescribe("Panorama 1    /tp @p ~ ~ ~ 90 0", true, false);
+            pan1.setChooserFilter(PNG_FILE_FILTER);
+            pan1.addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 90 0"));
+            pan1.getDescribe().setToolTipText("点击复制指令");
+            pan1.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_3, file.getAbsolutePath());
+            });
+
+            TextFiledWithDescribe pan4 = new TextFiledWithDescribe("Panorama 4    /tp @p ~ ~ ~ 0 -90", true, false);
+            pan4.setChooserFilter(PNG_FILE_FILTER);
+            pan4.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 -90"));
+            pan4.getDescribe().setToolTipText("点击复制指令");
+            pan4.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_4, file.getAbsolutePath());
+            });
+
+            TextFiledWithDescribe pan5 = new TextFiledWithDescribe("Panorama 5    /tp @p ~ ~ ~ 0 90", true, false);
+            pan5.setChooserFilter(PNG_FILE_FILTER);
+            pan5.getDescribe().addMouseListener(new CopyHandle("/tp @p ~ ~ ~ 0 90"));
+            pan5.getDescribe().setToolTipText("点击复制指令");
+            pan5.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.PANORAMA_5, file.getAbsolutePath());
+            });
+
+            //picture over background
+
+            TextFiledWithDescribe pictureOver = new TextFiledWithDescribe("覆盖图片", true, false);
+            pictureOver.setChooserFilter(PNG_FILE_FILTER);
+            pictureOver.setSelectFileListener(file -> {
+                System.out.println("Read an image:\n" + file.getAbsolutePath());
+                config.put(PanoramaDataType.OVER, file.getAbsolutePath());
+            });
+            config.put(PanoramaDataType.VAGUE, "0");
+            JScrollBar vague = new JScrollBar(JScrollBar.HORIZONTAL, 0, 1, 0, 65);
+            JLabel vagueValue = new JLabel("0");
+            GridLayout layout = new GridLayout(10, 1, 0, 10);
+            JPanel mainMenuBackgroundPanel = new JPanel(layout);
+            mainMenuBackgroundPanel.add(pan0);
+            mainMenuBackgroundPanel.add(pan1);
+            mainMenuBackgroundPanel.add(pan2);
+            mainMenuBackgroundPanel.add(pan3);
+            mainMenuBackgroundPanel.add(pan4);
+            mainMenuBackgroundPanel.add(pan5);
+            mainMenuBackgroundPanel.add(pictureOver);
+            mainMenuBackgroundPanel.add(new JLabel("模糊等级(0~64)  仅Optifine"));
+            mainMenuBackgroundPanel.add(vagueValue);
+            mainMenuBackgroundPanel.add(vague);
+            vague.addAdjustmentListener(e -> {
+                config.put(PanoramaDataType.VAGUE, String.valueOf(e.getValue()));
+                vagueValue.setText(String.valueOf(e.getValue()));
+            });
+            ScrollPane mainMenuScroll = new ScrollPane();
+            mainMenuScroll.add(mainMenuBackgroundPanel);
+            pane.addTab("主菜单全景图", mainMenuScroll);
+            System.out.println("Finish Menu Background Photo UI set.");
+
+            //--------Custom Loading Background--------//
+
+            JPanel loading = new JPanel();
+            TextFiledWithDescribe overworld = new TextFiledWithDescribe("主世界", true, false);
+            overworld.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.OVERWORLD, f.getAbsolutePath()));
+            TextFiledWithDescribe nether = new TextFiledWithDescribe("下界", true, false);
+            nether.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.NETHER, f.getAbsolutePath()));
+            TextFiledWithDescribe end = new TextFiledWithDescribe("末地", true, false);
+            end.setSelectFileListener(f -> config.put(CustomLoadingBackgroundDataType.END, f.getAbsolutePath()));
+            JCheckBox isGrid = new JCheckBox("网格");
+            isGrid.addItemListener(i -> config.put(CustomLoadingBackgroundDataType.IS_GIRD, String.valueOf((i.getStateChange() == ItemEvent.SELECTED))));
+            isGrid.setPreferredSize(new Dimension(300, 25));
+            loading.add(overworld);
+            loading.add(nether);
+            loading.add(end);
+            loading.add(isGrid);
+            pane.addTab("自定义加载界面", loading);
+
+            //--------MAKE--------//
+
+            JPanel savePanel = new JPanel();
+            TextFiledWithDescribe packPath = new TextFiledWithDescribe("保存路径", true, false);
+            packPath.isShowSaveDialog(true);
+            packPath.setSelectFileListener(file -> config.put(SaveConfigDataType.PACK_PATH, file.getAbsolutePath()));
+            JCheckBox isZip = new JCheckBox("制作为Zip压缩文件");
+            isZip.setPreferredSize(new Dimension(300, 25));
+            isZip.addActionListener(e -> config.put(SaveConfigDataType.IS_ZIP, String.valueOf(isZip.isSelected())));
+            JButton save = new JButton("保存");
+            save.setPreferredSize(new Dimension(300, 25));
+            save.addActionListener(e -> {
+                Thread t = new Thread(() -> {
+                    try {
+                        PackMaker.make(config);
+                    } catch (Exception ex) {
+                        Utils.exceptionHandle(ex);
+                    }
+                });
+                t.setName("make");
+                t.start();
+            });
+
+            savePanel.add(packPath);
+            savePanel.add(isZip);
+            savePanel.add(save);
+            pane.addTab("保存", savePanel);
+
+            //set frame visible
+            frame.setVisible(true);
         });
-
-        savePanel.add(packPath);
-        savePanel.add(isZip);
-        savePanel.add(save);
-        pane.addTab("保存", savePanel);
-
-        //set frame visible
-        frame.setVisible(true);
     }
 
     /**

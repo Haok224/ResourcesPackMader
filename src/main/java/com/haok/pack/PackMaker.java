@@ -144,15 +144,15 @@ public class PackMaker {
         }
         String steve = config.get(SkinDataType.STEVE);
         if (steve != null) {
-            File steveFile = new File(minecraft,"/textures/entity/steve.png");
-            System.out.println("Create entity dir:"+steveFile.getParentFile().mkdirs());
-            Utils.copy(new File(steve),steveFile);
+            File steveFile = new File(minecraft, "/textures/entity/steve.png");
+            System.out.println("Create entity dir:" + steveFile.getParentFile().mkdirs());
+            Utils.copy(new File(steve), steveFile);
         }
         String alex = config.get(SkinDataType.ALEX);
         if (alex != null) {
-            File alexFile = new File(minecraft,"/textures/entity/alex.png");
-            System.out.println("Create entity dir:"+alexFile.getParentFile().mkdirs());
-            Utils.copy(new File(alex),alexFile);
+            File alexFile = new File(minecraft, "/textures/entity/alex.png");
+            System.out.println("Create entity dir:" + alexFile.getParentFile().mkdirs());
+            Utils.copy(new File(alex), alexFile);
         }
 
         JOptionPane.showMessageDialog(Main.frame, "制作完成!", Main.PROPERTIES.get("title").toString(), JOptionPane.INFORMATION_MESSAGE);
